@@ -11,12 +11,18 @@ import {
 
 export default function RightSidebar({ 
   stats, 
-  tasks, 
+  tasks = [], 
+  updates = [],
   onTriggerTask, 
   onToggleTaskPause, 
   onViewLogs,
   onOpenAddTask
 }) {
+  const osProjectsCount = stats?.updates?.categories?.os_project ?? updates.filter(u => u.category === 'os_project').length;
+  const activeCronCount = stats?.tasks?.active ?? tasks.filter(t => t.status === 'active').length;
+  const totalCronCount = stats?.tasks?.total ?? tasks.length;
+  const unreadCount = stats?.updates?.unread ?? updates.filter(u => u.read_status === 0).length;
+
   return (
     <aside 
       className="w-80 border-l flex flex-col shrink-0 overflow-hidden select-none transition-colors duration-200"
@@ -50,7 +56,7 @@ export default function RightSidebar({
           >
             <span style={{ color: 'var(--text-secondary)' }}>OS Repos Tracked</span>
             <span className="font-bold" style={{ color: 'var(--text-primary)' }}>
-              {stats?.updates?.categories?.os_project || 0}
+              {osProjectsCount}
             </span>
           </div>
 
@@ -60,7 +66,7 @@ export default function RightSidebar({
           >
             <span style={{ color: 'var(--text-secondary)' }}>Active Cron Jobs</span>
             <span className="font-bold" style={{ color: 'var(--accent)' }}>
-              {stats?.tasks?.active || 0} / {stats?.tasks?.total || 0}
+              {activeCronCount} / {totalCronCount}
             </span>
           </div>
 
@@ -70,7 +76,7 @@ export default function RightSidebar({
           >
             <span style={{ color: 'var(--text-secondary)' }}>Unread Feed</span>
             <span className="font-bold" style={{ color: 'var(--accent)' }}>
-              {stats?.updates?.unread || 0}
+              {unreadCount}
             </span>
           </div>
 

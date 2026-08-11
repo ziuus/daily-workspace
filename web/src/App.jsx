@@ -47,6 +47,13 @@ export default function App() {
 
   useEffect(() => {
     fetchData();
+
+    // Live background polling for stats every 10 seconds
+    const statsInterval = setInterval(() => {
+      fetchStatsOnly();
+    }, 10000);
+
+    return () => clearInterval(statsInterval);
   }, [activeTab]);
 
   const fetchData = async () => {
@@ -238,6 +245,7 @@ export default function App() {
             <RightSidebar
               stats={stats}
               tasks={tasks}
+              updates={updates}
               onTriggerTask={handleTriggerTask}
               onToggleTaskPause={handleToggleTaskPause}
               onViewLogs={(t) => setActiveLogTask(t)}
