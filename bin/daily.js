@@ -10,7 +10,6 @@ const command = args[0];
 
 async function main() {
   if (!command) {
-    // Launch/Open Web Dashboard
     await launchDashboard();
     return;
   }
@@ -18,6 +17,18 @@ async function main() {
   switch (command) {
     case 'serve':
       runServer();
+      break;
+
+    case 'stop':
+      await stopServer();
+      break;
+
+    case 'restart':
+      await restartServer();
+      break;
+
+    case 'status':
+      await showStatus();
       break;
 
     case 'mcp':
@@ -67,20 +78,13 @@ async function launchDashboard() {
 
   if (!isRunning) {
     console.log(`Starting Daily background server on port ${port}...`);
-    const serverPath = path.join(__dirname, '..', 'server', 'index.js');
-    const child = spawn('node', [serverPath], {
-      detached: true,
-      stdio: 'ignore'
-    });
-    child.unref();
-    // Wait a brief moment for server bind
+    spawnBackgroundServer();
     await new Promise(r => setTimeout(r, 600));
   }
 
   const url = `http://localhost:${port}`;
   console.log(`\n✨ Daily Workspace Dashboard active at: ${url}\n`);
 
-  // Attempt to open browser
   try {
     if (process.platform === 'darwin') {
       execSync(`open ${url}`);
@@ -92,6 +96,81 @@ async function launchDashboard() {
   } catch (e) {
     console.log(`Open ${url} in your browser.`);
   }
+}
+
+function spawnBackgroundServer() {
+  const serverPath = path.join(__dirname, '..', 'server', 'index.js');
+  const child = spawn('node', [serverPath], {
+    detached: true,
+    stdio: 'ignore'
+  });
+  child.unref();
+}
+
+async function stopServer() {
+  const port = process.env.DAILY_PORT || 3456;
+  const isRunning = await checkPortRunning(port);
+
+  if (!isRunning) {
+    console.log(`Daily server is not running on port ${port}.`);
+    return;
+  }
+
+  try {
+    let killed = false;
+    try {
+      const pids = execSync(`lsof -t -i:${port} 2>/dev/null || fuser ${port}/tcp 2>/dev/null || pgrep -f "daily serve|server/index.js"`)
+        .toString()
+        .trim()
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      for (const pid of pids) {
+        if (pid && pid !== String(process.pid)) {
+          execSync(`kill -9 ${pid} 2>/dev/null || true`);
+          killed = true;
+        }
+      }
+    } catch (e) {
+      // Fallback
+    }
+
+    console.log(`🛑 Daily background server on port ${port} has been stopped.`);
+  } catch (e) {
+    console.error(`Failed to stop server: ${e.message}`);
+  }
+}
+
+async function restartServer() {
+  const port = process.env.DAILY_PORT || 3456;
+  console.log(`Restarting Daily server...`);
+  await stopServer();
+  await new Promise(r => setTimeout(r, 600));
+  spawnBackgroundServer();
+  await new Promise(r => setTimeout(r, 600));
+  console.log(`✨ Daily server restarted successfully at http://localhost:${port}`);
+}
+
+async function showStatus() {
+  const port = process.env.DAILY_PORT || 3456;
+  const isRunning = await checkPortRunning(port);
+
+  console.log('\n=== DAILY WORKSPACE STATUS ===\n');
+  console.log(`Server Status:  ${isRunning ? '🟢 ONLINE (http://localhost:' + port + ')' : '🔴 OFFLINE'}`);
+  
+  if (isRunning) {
+    try {
+      const res = await fetch(`http://localhost:${port}/api/stats`);
+      const stats = await res.json();
+      console.log(`Total Feed:     ${stats.updates.total} entries (${stats.updates.unread} unread)`);
+      console.log(`Cron Tasks:     ${stats.tasks.active} active / ${stats.tasks.total} total`);
+      console.log(`MCP Server:     Stdio Active`);
+    } catch (e) {
+      // ignore
+    }
+  }
+  console.log(`Database Path:  /home/zius/.daily/data/daily.db\n`);
 }
 
 function checkPortRunning(port) {
@@ -283,28 +362,18 @@ function printHelp() {
 Daily — Workspace, Intelligence Feed & Autonomous Task Dashboard
 
 USAGE:
-  daily                      Launch/open the Web Dashboard in browser (starts server if needed)
-  daily serve                Run the HTTP API server + scheduler in foreground
-  daily list                 Print recent intelligence feed entries to terminal
+  daily                      Launch/open the Web Dashboard in browser
+  daily stop                 Stop the background server daemon
+  daily restart              Restart the background server daemon
+  daily status               Display process status and database metrics
+  daily serve                Run server + scheduler in foreground
+  daily list                 Print recent feed updates to terminal
   daily add [flags]          Add a new update entry via CLI
-  daily task list            Display status table of all registered autonomous tasks
+  daily task list            Display autonomous tasks table
   daily task trigger <id>    Manually trigger execution of task <id>
-  daily task pause <id>      Pause autonomous task execution
-  daily task resume <id>     Resume autonomous task execution
-  daily task add [flags]     Register a new autonomous background task
-  daily mcp                  Start the Stdio MCP server for agent integration
-
-FLAGS (daily add):
-  --title "..."              Title of the digest/update
-  --category "..."           Category: os_project, ai_tool, tech_news, custom
-  --content "..."            Markdown formatted body
-  --tags "rust,llm"          Comma-separated tags
-
-FLAGS (daily task add):
-  --id "task-id"             Unique task string ID
-  --name "Task Title"        Display name
-  --cmd "python3 run.py"     Command or prompt to execute
-  --schedule "daily @ 9:00"  Cron or interval string
+  daily task pause <id>      Pause autonomous task cron execution
+  daily task resume <id>     Resume autonomous task cron execution
+  daily mcp                  Start Stdio MCP server
 `);
 }
 
