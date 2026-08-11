@@ -44,7 +44,7 @@
 * **🎨 22-Theme Studio & Dynamic Workspace Engine**: 22 hand-curated color presets (11 Light / 11 Dark) that transform 100% of the workspace interface (headers, sidebars, badges, buttons, dots, and surfaces).
 * **☀️/🌙 Paired Light & Dark Mode Toggling**: The Sun/Moon header button smoothly toggles between paired Light and Dark versions of your active theme family (e.g. *Rose Quartz* ↔ *Velvet Crimson Rose*).
 * **🤖 Autonomous Task & Cron Hub**: Manage background scripts (Python scripts, scrapers, system health watchdogs). Monitor status (`active`, `paused`, `running`, `error`), last/next run times, and live terminal logs.
-* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents (Claude Desktop, Cursor, Antigravity/Gemini, Hermes, Windsurf, Roo Code, Goose, Continue, Zed, Python/Node SDKs) to push markdown updates, read feed entries, and trigger tasks on demand.
+* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents (OpenCode, Hermes, Claude Desktop, Cursor, Antigravity/Gemini, Windsurf, Roo Code, Goose, Continue, Zed, Python/Node SDKs) to push markdown updates, read feed entries, and trigger tasks on demand.
 * **✍️ Rich GFM Markdown Renderer**: Built-in renderer with code syntax highlighting, copy-to-clipboard buttons, formatted tables, task checklists, and GFM callout blocks (`[!NOTE]`, `[!TIP]`, `[!WARNING]`).
 * **📦 Zero-Dependency SQLite Storage**: Powered by Node.js native `node:sqlite` for high-performance WAL-mode storage in `~/.daily/data/daily.db`.
 
@@ -75,9 +75,42 @@ daily status    # Check daemon PID and server health
 
 ## 🤖 MCP Server Agent Configurations
 
-Daily includes a built-in Stdio MCP Server (`npx -y @ziuus/daily mcp`). Below are the exact configuration snippets for all major AI agents and IDEs:
+Different agents use different configuration formats (YAML, JSON, CLI flags, or custom keys). Daily supports all standard Stdio MCP parameters (`npx -y @ziuus/daily mcp`).
 
-### 1. Claude Desktop
+Below are the exact setup snippets for each agent framework:
+
+### 1. OpenCode Agent
+Add to `~/.opencode/mcp.json` or run `opencode mcp add`:
+
+```json
+{
+  "mcpServers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+Or via OpenCode CLI:
+```bash
+opencode mcp add daily -- npx -y @ziuus/daily mcp
+```
+
+### 2. Hermes Agent *(YAML Format)*
+Add to `~/.hermes/config.yaml`:
+
+```yaml
+mcp_servers:
+  daily:
+    command: "npx"
+    args:
+      - "-y"
+      - "@ziuus/daily"
+      - "mcp"
+```
+
+### 3. Claude Desktop *(JSON Format)*
 Add to `claude_desktop_config.json`:
 * macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 * Windows: `%APPDATA%\Claude\claude_desktop_config.json`
@@ -94,7 +127,7 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-### 2. Cursor IDE
+### 4. Cursor IDE
 Go to **Cursor Settings** -> **Features** -> **MCP**, or add to `.cursor/mcp.json`:
 
 ```json
@@ -108,7 +141,7 @@ Go to **Cursor Settings** -> **Features** -> **MCP**, or add to `.cursor/mcp.jso
 }
 ```
 
-### 3. Antigravity / Gemini CLI
+### 5. Antigravity / Gemini CLI
 Add to `~/.gemini/antigravity-cli/mcp/daily/daily.json`:
 
 ```json
@@ -119,20 +152,7 @@ Add to `~/.gemini/antigravity-cli/mcp/daily/daily.json`:
 }
 ```
 
-### 4. Hermes Agent
-Add to `~/.hermes/config.yaml`:
-
-```yaml
-mcp_servers:
-  daily:
-    command: "npx"
-    args:
-      - "-y"
-      - "@ziuus/daily"
-      - "mcp"
-```
-
-### 5. Windsurf / Codeium Cascade
+### 6. Windsurf / Codeium Cascade
 Add to `~/.codeium/windsurf/mcp_config.json`:
 
 ```json
@@ -146,7 +166,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 }
 ```
 
-### 6. Roo Code / Cline (VS Code)
+### 7. Roo Code / Cline (VS Code)
 Add to `cline_mcp_settings.json`:
 
 ```json
@@ -160,14 +180,14 @@ Add to `cline_mcp_settings.json`:
 }
 ```
 
-### 7. Goose CLI
+### 8. Goose CLI *(Terminal Command)*
 Run in terminal:
 
 ```bash
 goose mcp add daily -- npx -y @ziuus/daily mcp
 ```
 
-### 8. Continue.dev
+### 9. Continue.dev *(Custom Key Format)*
 Add to `~/.continue/config.json`:
 
 ```json
@@ -184,7 +204,7 @@ Add to `~/.continue/config.json`:
 }
 ```
 
-### 9. Zed Editor
+### 10. Zed Editor *(Custom Key Format)*
 Add to `~/.config/zed/settings.json`:
 
 ```json
@@ -198,7 +218,7 @@ Add to `~/.config/zed/settings.json`:
 }
 ```
 
-### 10. Python Frameworks (LangChain / LlamaIndex / CrewAI)
+### 11. Python Frameworks (LangChain / LlamaIndex / CrewAI)
 
 ```python
 import asyncio
@@ -216,7 +236,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### 11. Node.js / TypeScript SDK
+### 12. Node.js / TypeScript SDK
 
 ```typescript
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
