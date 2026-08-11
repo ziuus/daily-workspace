@@ -50,27 +50,198 @@
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Installation & Quick Start
 
-### Installation
-
-Install globally via `npm`:
+### Global Installation via `npm`
 
 ```bash
 npm install -g @ziuus/daily
 ```
 
-Or run instantly with `npx`:
+### Starting the Workspace Dashboard
 
 ```bash
-npx @ziuus/daily
+# Open visual dashboard in browser (http://localhost:3456)
+daily
+
+# Background Daemon Process Controls
+daily start     # Start background daemon on port 3456
+daily stop      # Stop background daemon
+daily restart   # Restart server & sync web assets
+daily status    # Check daemon PID and server health
 ```
 
 ---
 
-## 💻 Command Line Interface (CLI)
+## 🤖 MCP Server Agent Configurations
 
-The `daily` binary provides full terminal control over feeds, tasks, background daemons, and MCP servers:
+Daily includes a built-in Stdio MCP Server (`npx -y @ziuus/daily mcp`). Below are the exact configuration snippets for all major AI agents and IDEs:
+
+### 1. Claude Desktop
+Add to `claude_desktop_config.json`:
+* macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+* Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+* Linux: `~/.config/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+
+### 2. Cursor IDE
+Go to **Cursor Settings** -> **Features** -> **MCP**, or add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+
+### 3. Antigravity / Gemini CLI
+Add to `~/.gemini/antigravity-cli/mcp/daily/daily.json`:
+
+```json
+{
+  "name": "daily",
+  "command": "npx",
+  "args": ["-y", "@ziuus/daily", "mcp"]
+}
+```
+
+### 4. Hermes Agent
+Add to `~/.hermes/config.yaml`:
+
+```yaml
+mcp_servers:
+  daily:
+    command: "npx"
+    args:
+      - "-y"
+      - "@ziuus/daily"
+      - "mcp"
+```
+
+### 5. Windsurf / Codeium Cascade
+Add to `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+
+### 6. Roo Code / Cline (VS Code)
+Add to `cline_mcp_settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+
+### 7. Goose CLI
+Run in terminal:
+
+```bash
+goose mcp add daily -- npx -y @ziuus/daily mcp
+```
+
+### 8. Continue.dev
+Add to `~/.continue/config.json`:
+
+```json
+{
+  "experimental": {
+    "modelContextProtocol": [
+      {
+        "name": "daily",
+        "command": "npx",
+        "args": ["-y", "@ziuus/daily", "mcp"]
+      }
+    ]
+  }
+}
+```
+
+### 9. Zed Editor
+Add to `~/.config/zed/settings.json`:
+
+```json
+{
+  "context_servers": {
+    "daily": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/daily", "mcp"]
+    }
+  }
+}
+```
+
+### 10. Python Frameworks (LangChain / LlamaIndex / CrewAI)
+
+```python
+import asyncio
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+async def main():
+    server_params = StdioServerParameters(command="npx", args=["-y", "@ziuus/daily", "mcp"])
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            updates = await session.call_tool("daily_get_updates", {"limit": 5})
+            print(updates)
+
+asyncio.run(main())
+```
+
+### 11. Node.js / TypeScript SDK
+
+```typescript
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+
+const transport = new StdioClientTransport({ command: 'npx', args: ['-y', '@ziuus/daily', 'mcp'] });
+const client = new Client({ name: 'custom-agent', version: '1.0.0' }, { capabilities: {} });
+await client.connect(transport);
+const updates = await client.callTool({ name: 'daily_get_updates', arguments: { limit: 5 } });
+```
+
+---
+
+## 🛠️ Exposed MCP Tools Reference
+
+| Tool Name | Parameters | Description |
+| :--- | :--- | :--- |
+| `daily_add_update` | `title`, `category`, `markdown_content`, `tags`, `metadata` | Push a new markdown intelligence entry to the workspace feed. |
+| `daily_get_updates` | `since`, `category`, `limit`, `read_status` | Fetch recorded updates between a given timestamp and now. |
+| `daily_list_tasks` | `status_filter` | List all registered autonomous background tasks and status. |
+| `daily_trigger_task` | `task_id` | Manually trigger immediate execution of a task. |
+
+---
+
+## 💻 Command Line Interface (CLI) Commands
 
 | Command | Description |
 | :--- | :--- |
@@ -89,74 +260,6 @@ The `daily` binary provides full terminal control over feeds, tasks, background 
 | `daily task add [flags]` | Registers a new autonomous cron script. |
 | `daily serve` | Runs the REST API server and task scheduler in the foreground. |
 | `daily mcp` | Launches the Stdio MCP Server for AI agents. |
-
----
-
-## 🤖 MCP Server Integration (`daily-mcp`)
-
-*For the full multi-framework integration guide, see [`MCP_GUIDE.md`](MCP_GUIDE.md).*
-
-### Quick Configuration Snippets
-
-#### 1. Claude Desktop (`claude_desktop_config.json`)
-
-```json
-{
-  "mcpServers": {
-    "daily": {
-      "command": "npx",
-      "args": ["-y", "@ziuus/daily", "mcp"]
-    }
-  }
-}
-```
-
-#### 2. Cursor / Windsurf / Roo Code / VS Code (`.cursor/mcp.json`)
-
-```json
-{
-  "mcpServers": {
-    "daily": {
-      "command": "npx",
-      "args": ["-y", "@ziuus/daily", "mcp"]
-    }
-  }
-}
-```
-
-#### 3. Hermes Agent (`~/.hermes/config.yaml`)
-
-```yaml
-mcp_servers:
-  daily:
-    command: "npx"
-    args:
-      - "-y"
-      - "@ziuus/daily"
-      - "mcp"
-```
-
-#### 4. Goose CLI / Open-Source Agents
-
-```bash
-goose mcp add daily -- npx -y @ziuus/daily mcp
-```
-
-#### 5. Python Agent SDK (`mcp` package)
-
-```python
-from mcp import StdioServerParameters
-server_params = StdioServerParameters(command="npx", args=["-y", "@ziuus/daily", "mcp"])
-```
-
-### Exposed MCP Tools
-
-| Tool Name | Parameters | Description |
-| :--- | :--- | :--- |
-| `daily_add_update` | `title`, `category`, `markdown_content`, `tags`, `metadata` | Push a new markdown intelligence entry to the workspace feed. |
-| `daily_get_updates` | `since`, `category`, `limit`, `read_status` | Fetch recorded updates between a given timestamp and now. |
-| `daily_list_tasks` | `status_filter` | List all registered autonomous background tasks and status. |
-| `daily_trigger_task` | `task_id` | Manually trigger immediate execution of a task. |
 
 ---
 
@@ -185,6 +288,28 @@ The local HTTP server on port `3456` exposes JSON REST endpoints:
 * `POST /api/tasks/:id/trigger` — Execute task immediately.
 * `GET /api/tasks/:id/logs` — Fetch execution log history for a task.
 * `DELETE /api/tasks/:id` — Delete a task registration.
+
+---
+
+## 📁 Storage & Data Isolation
+
+All runtime database state, task logs, and configuration remain isolated in `~/.daily/`:
+
+```
+~/.daily/
+├── data/
+│   ├── daily.db               # SQLite WAL database (updates, tasks, execution logs)
+│   └── config.json            # User & server configuration
+├── web/
+│   └── dist/                  # Built production Web Dashboard assets
+├── mcp/
+│   └── index.js               # Stdio MCP Server
+├── server/
+│   ├── index.js               # REST API & static file server
+│   └── scheduler.js           # Autonomous background task scheduler
+└── bin/
+    └── daily.js               # Global CLI entrypoint
+```
 
 ---
 
