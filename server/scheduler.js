@@ -22,7 +22,8 @@ function runTask(taskId) {
 
     if (!isDirectScript) {
       if (agentType === 'hermes') {
-        commandToExec = `hermes run ${JSON.stringify(commandToExec)}`;
+        // hermes CLI has no `run` subcommand; use -z for one-shot prompts
+        commandToExec = `hermes -z ${JSON.stringify(commandToExec)}`;
       } else if (agentType === 'opencode') {
         commandToExec = `opencode run ${JSON.stringify(commandToExec)}`;
       } else if (agentType === 'claude') {
