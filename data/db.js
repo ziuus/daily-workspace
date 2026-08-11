@@ -44,6 +44,7 @@ function initSchema(db) {
       command_or_prompt TEXT NOT NULL,
       schedule TEXT NOT NULL,
       status TEXT DEFAULT 'active', -- active, paused, error, running
+      agent_type TEXT DEFAULT 'system', -- hermes, opencode, claude, system, cli
       last_run_at DATETIME,
       next_run_at DATETIME,
       last_output TEXT
@@ -58,7 +59,14 @@ function initSchema(db) {
     );
   `);
 
-  // Check if updates is empty and seed initial high-signal digest data
+  // Column migration for agent_type
+  try {
+    db.exec("ALTER TABLE tasks ADD COLUMN agent_type TEXT DEFAULT 'system';");
+  } catch (e) {
+    // Column already exists
+  }
+
+  // Check if updates is empty and seed initial data
   const countRow = db.prepare('SELECT COUNT(*) as count FROM updates').get();
   if (countRow.count === 0) {
     seedInitialData(db);
@@ -269,10 +277,10 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
     );
   }
 
-  // Seed Autonomous Tasks
+  // Seed Autonomous Tasks with agent_type bindings
   const insertTask = db.prepare(`
-    INSERT INTO tasks (id, name, command_or_prompt, schedule, status, last_run_at, next_run_at, last_output)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO tasks (id, name, command_or_prompt, schedule, status, agent_type, last_run_at, next_run_at, last_output)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   const initialTasks = [
@@ -282,9 +290,10 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
       command_or_prompt: "python3 ~/.daily/scripts/reddit_warmup.py",
       schedule: "daily @ 09:00 IST",
       status: "active",
+      agent_type: "hermes",
       last_run_at: new Date(now.getTime() - 4 * 3600 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 20 * 3600 * 1000).toISOString(),
-      last_output: "[WARMUP] Awaiting first run — reads ~/.reddit-campaign/state.md"
+      last_output: "[WARMUP] Reads ~/.reddit-campaign/state.md"
     },
     {
       id: "ai-news-scraper",
@@ -292,9 +301,10 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
       command_or_prompt: "node ~/.daily/scripts/ai_scraper.js",
       schedule: "every 6h",
       status: "active",
+      agent_type: "system",
       last_run_at: new Date(now.getTime() - 2 * 3600 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 4 * 3600 * 1000).toISOString(),
-      last_output: "[SCRAPER] Awaiting first run — fetches GitHub trending + HN"
+      last_output: "[SCRAPER] Fetches GitHub trending + HN"
     },
     {
       id: "system-watchdog",
@@ -302,9 +312,10 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
       command_or_prompt: "node ~/.daily/scripts/watchdog.js",
       schedule: "every 30m",
       status: "active",
+      agent_type: "system",
       last_run_at: new Date(now.getTime() - 15 * 60 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 15 * 60 * 1000).toISOString(),
-      last_output: "[WATCHDOG] Awaiting first run — reports real memory/disk/DB health"
+      last_output: "[WATCHDOG] Reports real memory/disk/DB health"
     },
     {
       id: "repo-star-tracker",
@@ -312,6 +323,7 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
       command_or_prompt: "node ~/.daily/scripts/repo_star_tracker.js",
       schedule: "daily @ 14:00 IST",
       status: "paused",
+      agent_type: "system",
       last_run_at: new Date(now.getTime() - 28 * 3600 * 1000).toISOString(),
       next_run_at: null,
       last_output: "[PAUSED] Task manually paused by user."
@@ -325,6 +337,7 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
       t.command_or_prompt,
       t.schedule,
       t.status,
+      t.agent_type,
       t.last_run_at,
       t.next_run_at,
       t.last_output
@@ -430,19 +443,19 @@ function getTaskById(id) {
   return stmt.get(id);
 }
 
-function addTask({ id, name, command_or_prompt, schedule, status = 'active' }) {
+function addTask({ id, name, command_or_prompt, schedule, status = 'active', agent_type = 'system' }) {
   const db = getDb();
   const stmt = db.prepare(`
-    INSERT INTO tasks (id, name, command_or_prompt, schedule, status, last_run_at, next_run_at, last_output)
-    VALUES (?, ?, ?, ?, ?, NULL, NULL, 'Task registered.')
+    INSERT INTO tasks (id, name, command_or_prompt, schedule, status, agent_type, last_run_at, next_run_at, last_output)
+    VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, 'Task registered.')
   `);
-  stmt.run(id, name, command_or_prompt, schedule, status);
+  stmt.run(id, name, command_or_prompt, schedule, status, agent_type);
   return getTaskById(id);
 }
 
 function updateTask(id, fields = {}) {
   const db = getDb();
-  const allowed = ['name', 'command_or_prompt', 'schedule', 'status', 'last_run_at', 'next_run_at', 'last_output'];
+  const allowed = ['name', 'command_or_prompt', 'schedule', 'status', 'agent_type', 'last_run_at', 'next_run_at', 'last_output'];
   const sets = [];
   const params = [];
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { X, Terminal } from 'lucide-react';
+import { X, Terminal, Bot } from 'lucide-react';
 
 export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [command, setCommand] = useState('');
   const [schedule, setSchedule] = useState('daily @ 14:00 IST');
+  const [agentType, setAgentType] = useState('system');
 
   if (!isOpen) return null;
 
@@ -18,6 +19,7 @@ export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
       name,
       command_or_prompt: command,
       schedule,
+      agent_type: agentType,
       status: 'active'
     });
 
@@ -25,6 +27,7 @@ export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
     setName('');
     setCommand('');
     setSchedule('daily @ 14:00 IST');
+    setAgentType('system');
     onClose();
   };
 
@@ -42,16 +45,34 @@ export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">Task String ID</label>
-            <input
-              type="text"
-              required
-              value={id}
-              onChange={e => setId(e.target.value)}
-              placeholder="e.g. reddit-warmup"
-              className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-sky-500/50"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs font-mono text-slate-400">Task String ID</label>
+              <input
+                type="text"
+                required
+                value={id}
+                onChange={e => setId(e.target.value)}
+                placeholder="e.g. reddit-warmup"
+                className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-sky-500/50"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                <Bot className="w-3 h-3 text-sky-400" /> Executor Agent
+              </label>
+              <select
+                value={agentType}
+                onChange={e => setAgentType(e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-sky-500/50"
+              >
+                <option value="system">System / Script (Bash/Python/Node)</option>
+                <option value="hermes">Hermes Agent</option>
+                <option value="opencode">OpenCode Agent</option>
+                <option value="claude">Claude Agent</option>
+              </select>
+            </div>
           </div>
 
           <div className="space-y-1">
@@ -67,13 +88,13 @@ export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">Command or Script Path</label>
+            <label className="text-xs font-mono text-slate-400">Command or Agent Prompt</label>
             <input
               type="text"
               required
               value={command}
               onChange={e => setCommand(e.target.value)}
-              placeholder="python3 ~/.daily/scripts/warmup.py"
+              placeholder="python3 ~/.daily/scripts/warmup.py or 'Analyze trending AI repos'"
               className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-xs text-slate-200 placeholder-slate-500 font-mono focus:outline-none focus:border-sky-500/50"
             />
           </div>

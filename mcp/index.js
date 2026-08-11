@@ -4,7 +4,7 @@ const db = require('../data/db.js');
 const scheduler = require('../server/scheduler.js');
 
 const SERVER_NAME = 'daily-mcp';
-const SERVER_VERSION = '1.0.0';
+const SERVER_VERSION = '1.1.0';
 
 const TOOLS = [
   {
@@ -54,8 +54,24 @@ const TOOLS = [
     }
   },
   {
+    name: 'daily_add_task',
+    description: 'Register a new autonomous task in the Daily Workspace, specifying which AI agent (hermes, opencode, claude, system) executes it.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Unique task ID e.g. opencode-repo-audit' },
+        name: { type: 'string', description: 'Human readable task name' },
+        command_or_prompt: { type: 'string', description: 'Command line string or agent prompt to execute' },
+        schedule: { type: 'string', description: 'Schedule string e.g. every 6h, daily @ 09:00' },
+        agent_type: { type: 'string', description: 'Agent executor binding: hermes, opencode, claude, system, cli (default: system)' },
+        status: { type: 'string', enum: ['active', 'paused'], description: 'Initial task status' }
+      },
+      required: ['id', 'name', 'command_or_prompt', 'schedule']
+    }
+  },
+  {
     name: 'daily_trigger_task',
-    description: 'Manually trigger execution of a specific autonomous task.',
+    description: 'Manually trigger execution of a specific autonomous task using its bound agent or script.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -151,6 +167,16 @@ async function handleToolCall(id, params) {
     } else if (name === 'daily_list_tasks') {
       const tasks = db.getTasks({ status: args.status_filter });
       resultText = JSON.stringify(tasks, null, 2);
+    } else if (name === 'daily_add_task') {
+      const created = db.addTask({
+        id: args.id,
+        name: args.name,
+        command_or_prompt: args.command_or_prompt,
+        schedule: args.schedule,
+        status: args.status || 'active',
+        agent_type: args.agent_type || 'system'
+      });
+      resultText = `Successfully registered task "${created.id}" bound to agent "${created.agent_type}".`;
     } else if (name === 'daily_trigger_task') {
       const runRes = await scheduler.runTask(args.task_id);
       resultText = `Task "${args.task_id}" execution completed:\nStatus: ${runRes.success ? 'SUCCESS' : 'FAILED'}\nOutput:\n${runRes.output}`;

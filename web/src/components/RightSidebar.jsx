@@ -6,7 +6,8 @@ import {
   Pause, 
   FileText, 
   Plus,
-  Server
+  Server,
+  Bot
 } from 'lucide-react';
 
 export default function RightSidebar({ 
@@ -15,108 +16,136 @@ export default function RightSidebar({
   updates = [],
   onTriggerTask, 
   onToggleTaskPause, 
-  onViewLogs,
-  onOpenAddTask
+  onOpenLogs, 
+  onOpenAddTask,
+  onOpenTaskView
 }) {
-  const osProjectsCount = stats?.updates?.categories?.os_project ?? updates.filter(u => u.category === 'os_project').length;
-  const activeCronCount = stats?.tasks?.active ?? tasks.filter(t => t.status === 'active').length;
-  const totalCronCount = stats?.tasks?.total ?? tasks.length;
+  // Derived metrics fallback if stats is null or initializing
+  const osRepoCount = stats?.updates?.categories?.os_project ?? updates.filter(u => u.category === 'os_project').length;
+  const activeTaskCount = stats?.tasks?.active ?? tasks.filter(t => t.status === 'active').length;
+  const totalTaskCount = stats?.tasks?.total ?? tasks.length;
   const unreadCount = stats?.updates?.unread ?? updates.filter(u => u.read_status === 0).length;
 
   return (
-    <aside 
-      className="w-80 border-l flex flex-col shrink-0 overflow-hidden select-none transition-colors duration-200"
+    <div 
+      className="w-80 border-l flex flex-col h-full shrink-0 transition-colors"
       style={{
         backgroundColor: 'var(--bg-surface)',
         borderColor: 'var(--border)'
       }}
     >
-      {/* Workspace Metrics */}
+      {/* Sidebar Header */}
       <div 
-        className="p-4 border-b space-y-3"
-        style={{ borderColor: 'var(--border-subtle)' }}
+        className="p-4 border-b flex items-center justify-between"
+        style={{ borderColor: 'var(--border)' }}
       >
-        <div className="flex items-center justify-between">
-          <h3 
-            className="text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1.5"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            <Activity className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-            <span>Workspace Metrics</span>
-          </h3>
-          <span className="text-[10px] font-mono font-semibold" style={{ color: 'var(--accent)' }}>
-            NOMINAL
-          </span>
+        <div className="flex items-center space-x-2">
+          <Activity className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+          <h2 className="text-xs font-bold font-mono uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
+            Workspace Metrics
+          </h2>
         </div>
 
-        <div className="space-y-1.5 text-xs font-mono">
-          <div 
-            className="flex items-center justify-between py-1 border-b"
-            style={{ borderColor: 'var(--border-subtle)' }}
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={onOpenTaskView}
+            title="Open Task Hub View"
+            className="p-1 rounded transition-colors"
+            style={{ color: 'var(--text-secondary)' }}
           >
-            <span style={{ color: 'var(--text-secondary)' }}>OS Repos Tracked</span>
-            <span className="font-bold" style={{ color: 'var(--text-primary)' }}>
-              {osProjectsCount}
-            </span>
-          </div>
-
-          <div 
-            className="flex items-center justify-between py-1 border-b"
-            style={{ borderColor: 'var(--border-subtle)' }}
+            <Server className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={onOpenAddTask}
+            title="Register New Task"
+            className="p-1 rounded transition-colors"
+            style={{ color: 'var(--text-secondary)' }}
           >
-            <span style={{ color: 'var(--text-secondary)' }}>Active Cron Jobs</span>
-            <span className="font-bold" style={{ color: 'var(--accent)' }}>
-              {activeCronCount} / {totalCronCount}
-            </span>
-          </div>
-
-          <div 
-            className="flex items-center justify-between py-1 border-b"
-            style={{ borderColor: 'var(--border-subtle)' }}
-          >
-            <span style={{ color: 'var(--text-secondary)' }}>Unread Feed</span>
-            <span className="font-bold" style={{ color: 'var(--accent)' }}>
-              {unreadCount}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between py-1">
-            <span style={{ color: 'var(--text-secondary)' }}>MCP Server</span>
-            <span className="font-bold flex items-center gap-1" style={{ color: 'var(--accent)' }}>
-              <Server className="w-3 h-3" />
-              <span>Stdio</span>
-            </span>
-          </div>
+            <Plus className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 
-      {/* Autonomous Tasks Header */}
+      {/* High Density Metric Cards */}
       <div 
-        className="p-3 border-b flex items-center justify-between"
-        style={{ borderColor: 'var(--border-subtle)' }}
+        className="p-4 grid grid-cols-2 gap-2 border-b"
+        style={{ borderColor: 'var(--border)' }}
       >
-        <div className="flex items-center space-x-1.5">
-          <Terminal className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-          <h3 
-            className="text-xs font-bold font-mono uppercase tracking-wider"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            Autonomous Tasks
-          </h3>
-        </div>
-
-        <button
-          onClick={onOpenAddTask}
-          className="px-2 py-0.5 rounded transition-colors text-xs flex items-center gap-1 font-mono border"
+        <div 
+          className="p-2.5 rounded-lg border transition-colors"
           style={{
-            backgroundColor: 'var(--bg-subtle)',
-            borderColor: 'var(--border)',
-            color: 'var(--text-primary)'
+            backgroundColor: 'var(--bg-base)',
+            borderColor: 'var(--border-subtle)'
           }}
         >
-          <Plus className="w-3 h-3" />
-          <span>New</span>
-        </button>
+          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
+            OS Repos Tracked
+          </span>
+          <span className="text-lg font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+            {osRepoCount}
+          </span>
+        </div>
+
+        <div 
+          className="p-2.5 rounded-lg border transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-base)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
+          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
+            Active Cron Jobs
+          </span>
+          <span className="text-lg font-bold font-mono" style={{ color: 'var(--accent)' }}>
+            {activeTaskCount} <span className="text-xs" style={{ color: 'var(--text-muted)' }}>/ {totalTaskCount}</span>
+          </span>
+        </div>
+
+        <div 
+          className="p-2.5 rounded-lg border transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-base)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
+          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
+            Unread Feed
+          </span>
+          <span className="text-lg font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+            {unreadCount}
+          </span>
+        </div>
+
+        <div 
+          className="p-2.5 rounded-lg border transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-base)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
+          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
+            MCP Server
+          </span>
+          <span className="text-xs font-bold font-mono block mt-1" style={{ color: 'var(--accent)' }}>
+            Stdio (Online)
+          </span>
+        </div>
+      </div>
+
+      {/* Section Header: Autonomous Tasks */}
+      <div 
+        className="px-4 py-3 border-b flex items-center justify-between"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <div className="flex items-center space-x-2">
+          <Terminal className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+          <span className="text-xs font-bold font-mono uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
+            Autonomous Tasks
+          </span>
+        </div>
+        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--accent-bg)', color: 'var(--accent)' }}>
+          {tasks.length} Configured
+        </span>
       </div>
 
       {/* Minimal Borderless Task Rows */}
@@ -130,6 +159,7 @@ export default function RightSidebar({
             const isActive = task.status === 'active';
             const isRunning = task.status === 'running';
             const isError = task.status === 'error';
+            const agentName = (task.agent_type || 'system').toUpperCase();
 
             return (
               <div
@@ -151,9 +181,12 @@ export default function RightSidebar({
                     <span className="text-xs font-mono font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
                       {task.id}
                     </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded uppercase border" style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
+                      {agentName}
+                    </span>
                   </div>
 
-                  <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>
+                  <span className="text-[10px] font-mono shrink-0" style={{ color: 'var(--text-muted)' }}>
                     {task.schedule}
                   </span>
                 </div>
@@ -169,31 +202,30 @@ export default function RightSidebar({
                   <button
                     onClick={() => onTriggerTask(task.id)}
                     disabled={isRunning}
-                    className="flex items-center space-x-1 px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-colors disabled:opacity-50"
+                    className="flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-mono transition-opacity"
                     style={{
                       backgroundColor: 'var(--accent)',
                       color: '#FFFFFF'
                     }}
                   >
                     <Play className="w-2.5 h-2.5 fill-current" />
-                    <span>Run Now</span>
+                    <span>{isRunning ? 'Running...' : 'Run Now'}</span>
                   </button>
 
                   <div className="flex items-center space-x-1">
                     <button
-                      onClick={() => onToggleTaskPause(task.id, isActive ? 'paused' : 'active')}
+                      onClick={() => onToggleTaskPause(task.id, task.status)}
+                      title={isActive ? "Pause Task" : "Resume Task"}
                       className="p-1 rounded transition-colors"
-                      style={{ color: 'var(--text-secondary)' }}
-                      title={isActive ? 'Pause Task' : 'Resume Task'}
+                      style={{ color: 'var(--text-muted)' }}
                     >
-                      {isActive ? <Pause className="w-3 h-3" style={{ color: 'var(--accent)' }} /> : <Play className="w-3 h-3" style={{ color: 'var(--accent)' }} />}
+                      {isActive ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
                     </button>
-                    
                     <button
-                      onClick={() => onViewLogs(task)}
+                      onClick={() => onOpenLogs(task.id)}
+                      title="View Execution Logs"
                       className="p-1 rounded transition-colors"
-                      style={{ color: 'var(--text-secondary)' }}
-                      title="View Logs"
+                      style={{ color: 'var(--text-muted)' }}
                     >
                       <FileText className="w-3 h-3" />
                     </button>
@@ -204,6 +236,6 @@ export default function RightSidebar({
           })
         )}
       </div>
-    </aside>
+    </div>
   );
 }

@@ -14,10 +14,23 @@ function runTask(taskId) {
     db.updateTask(taskId, { status: 'running', last_run_at: nowIso });
 
     const startTime = Date.now();
-    // Run the task's real command_or_prompt as-is. No hardcoded substitutions.
-    const commandToExec = task.command_or_prompt;
+    let commandToExec = task.command_or_prompt;
 
-    exec(commandToExec, { timeout: 30000 }, (error, stdout, stderr) => {
+    // Agentic execution binding: format command according to agent_type if not a direct script
+    const agentType = (task.agent_type || 'system').toLowerCase();
+    const isDirectScript = /^(node|python|python3|bash|sh|daily|\/|\.\/)/.test(commandToExec.trim());
+
+    if (!isDirectScript) {
+      if (agentType === 'hermes') {
+        commandToExec = `hermes run ${JSON.stringify(commandToExec)}`;
+      } else if (agentType === 'opencode') {
+        commandToExec = `opencode run ${JSON.stringify(commandToExec)}`;
+      } else if (agentType === 'claude') {
+        commandToExec = `claude -p ${JSON.stringify(commandToExec)}`;
+      }
+    }
+
+    exec(commandToExec, { timeout: 45000 }, (error, stdout, stderr) => {
       const durationMs = Date.now() - startTime;
       const rawOutput = (stdout + '\n' + stderr).trim() || (error ? error.message : 'Execution completed with no output.');
       const finalStatus = error ? 'error' : 'active';
@@ -81,7 +94,7 @@ function checkScheduledTasks() {
       }
 
       if (shouldRun) {
-        console.log(`[SCHEDULER] Auto-triggering task: ${task.id} (${task.name})`);
+        console.log(`[SCHEDULER] Auto-triggering task: ${task.id} (${task.name}) [Agent: ${task.agent_type || 'system'}]`);
         runTask(task.id);
       }
     }
