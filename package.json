@@ -1,6 +1,6 @@
 {
   "name": "@ziuus/daily",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Professional workspace, daily intelligence feed, and autonomous task management dashboard",
   "main": "server/index.js",
   "bin": {

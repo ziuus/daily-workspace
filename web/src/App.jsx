@@ -11,7 +11,7 @@ import TaskLogsModal from './components/TaskLogsModal.jsx';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('daily_theme') || 'dark';
+    return localStorage.getItem('daily_theme') || 'light';
   });
 
   const [updates, setUpdates] = useState([]);
@@ -190,7 +190,7 @@ export default function App() {
   const unreadCount = updates.filter(u => u.read_status === 0).length;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 overflow-hidden font-sans antialiased">
+    <div className="h-screen w-screen flex flex-col bg-slate-50 dark:bg-[#0C0E12] text-slate-900 dark:text-slate-100 overflow-hidden font-sans antialiased">
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}

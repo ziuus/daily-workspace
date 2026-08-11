@@ -2,37 +2,46 @@
 
 @layer base {
   :root {
-    --bg-base: #F8FAFC;
+    --bg-page: #FBFBFC;
     --bg-surface: #FFFFFF;
-    --bg-card: #F1F5F9;
+    --bg-subtle: #F1F5F9;
+    --bg-hover: #F8FAFC;
     --text-primary: #0F172A;
     --text-secondary: #475569;
     --text-muted: #94A3B8;
-    --border-color: #E2E8F0;
-    --accent-emerald: #059669;
+    --border: #E2E8F0;
+    --border-subtle: #F1F5F9;
+    --accent: #10B981;
+    --accent-bg: #ECFDF5;
+    --accent-text: #047857;
   }
 
   .dark {
-    --bg-base: #0B0F19;
-    --bg-surface: #111827;
-    --bg-card: #1F2937;
+    --bg-page: #0C0E12;
+    --bg-surface: #12151C;
+    --bg-subtle: #1A1E26;
+    --bg-hover: #161A22;
     --text-primary: #F8FAFC;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --accent-emerald: #10B981;
+    --border: #222732;
+    --border-subtle: #1A1E26;
+    --accent: #10B981;
+    --accent-bg: rgba(16, 185, 129, 0.12);
+    --accent-text: #34D399;
   }
 
   body {
-    background-color: var(--bg-base);
+    background-color: var(--bg-page);
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow: hidden;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Custom Soft Scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -41,89 +50,90 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
-}
-
-/* Studio Glass Card Utility */
-.studio-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  transition: all 0.15s ease-in-out;
-}
-
-.studio-card-hover:hover {
-  border-color: rgba(16, 185, 129, 0.4);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: rgba(148, 163, 184, 0.5);
 }
 
 /* Status Pulse Animation */
 @keyframes status-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(1.2); }
+  50% { opacity: 0.35; transform: scale(1.25); }
 }
 .animate-status-pulse {
-  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: status-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Markdown Typography Polish */
+/* Editorial Markdown Typography */
 .markdown-body {
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.75;
+  color: var(--text-secondary);
 }
+
 .markdown-body h1 {
-  font-size: 1.65rem;
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.025em;
-  margin-top: 1.5rem;
+  color: var(--text-primary);
+  margin-top: 1.75rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border);
 }
+
 .markdown-body h2 {
   font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.015em;
+  color: var(--text-primary);
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-subtle);
 }
+
 .markdown-body h3 {
-  font-size: 1.15rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  color: #059669;
+  color: var(--accent-text);
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
 }
-.dark .markdown-body h3 {
-  color: #34D399;
-}
+
 .markdown-body h4 {
   font-size: 1rem;
   font-weight: 600;
+  color: var(--text-primary);
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
+
 .markdown-body p {
   margin-bottom: 1.15rem;
   color: var(--text-secondary);
 }
+
 .markdown-body ul {
   list-style-type: disc;
   padding-left: 1.25rem;
   margin-bottom: 1.15rem;
 }
+
 .markdown-body ol {
   list-style-type: decimal;
   padding-left: 1.25rem;
   margin-bottom: 1.15rem;
 }
+
 .markdown-body li {
   margin-bottom: 0.35rem;
   color: var(--text-secondary);
+}
+
+.markdown-body strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
