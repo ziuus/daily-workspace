@@ -1,29 +1,10 @@
 export const THEMES = [
-  // LIGHT THEMES (11)
-  {
-    id: 'rose-quartz',
-    name: 'Rose Quartz',
-    category: 'Light',
-    preview: ['#FDF2F2', '#FFF8F8', '#E11D48'],
-    vars: {
-      '--bg-base': '#FDF2F2',
-      '--bg-surface': '#FFF8F8',
-      '--bg-subtle': '#FCE7E7',
-      '--bg-hover': '#F8D7D7',
-      '--text-primary': '#4C0519',
-      '--text-secondary': '#881337',
-      '--text-muted': '#F43F5E',
-      '--border': '#FCA5A5',
-      '--border-subtle': '#FECDD3',
-      '--accent': '#E11D48',
-      '--accent-bg': '#FFE4E6',
-      '--accent-text': '#BE123C',
-    }
-  },
+  // LIGHT THEMES
   {
     id: 'emerald-light',
-    name: 'Cream & Emerald',
+    name: 'Cream & Emerald (Original)',
     category: 'Light',
+    pairId: 'emerald-dark',
     preview: ['#FAF9F6', '#FFFFFF', '#059669'],
     vars: {
       '--bg-base': '#FAF9F6',
@@ -41,9 +22,31 @@ export const THEMES = [
     }
   },
   {
+    id: 'rose-quartz',
+    name: 'Rose Quartz',
+    category: 'Light',
+    pairId: 'velvet-rose',
+    preview: ['#FDF2F2', '#FFF8F8', '#E11D48'],
+    vars: {
+      '--bg-base': '#FDF2F2',
+      '--bg-surface': '#FFF8F8',
+      '--bg-subtle': '#FCE7E7',
+      '--bg-hover': '#F8D7D7',
+      '--text-primary': '#4C0519',
+      '--text-secondary': '#881337',
+      '--text-muted': '#F43F5E',
+      '--border': '#FCA5A5',
+      '--border-subtle': '#FECDD3',
+      '--accent': '#E11D48',
+      '--accent-bg': '#FFE4E6',
+      '--accent-text': '#BE123C',
+    }
+  },
+  {
     id: 'blue-slate',
     name: 'Vercel Blue Slate',
     category: 'Light',
+    pairId: 'midnight-graphite',
     preview: ['#F8FAFC', '#FFFFFF', '#2563EB'],
     vars: {
       '--bg-base': '#F8FAFC',
@@ -64,6 +67,7 @@ export const THEMES = [
     id: 'warm-clay',
     name: 'Warm Clay & Amber',
     category: 'Light',
+    pairId: 'amber-luxe',
     preview: ['#FDFBF7', '#FFFDF9', '#D97706'],
     vars: {
       '--bg-base': '#FDFBF7',
@@ -84,6 +88,7 @@ export const THEMES = [
     id: 'soft-mint',
     name: 'Nordic Sage',
     category: 'Light',
+    pairId: 'forest-night',
     preview: ['#F4F9F4', '#FFFFFF', '#0D9488'],
     vars: {
       '--bg-base': '#F4F9F4',
@@ -104,6 +109,7 @@ export const THEMES = [
     id: 'lavender-dusk',
     name: 'Lavender Haze',
     category: 'Light',
+    pairId: 'cosmic-violet',
     preview: ['#F5F3FF', '#FAF8FF', '#7C3AED'],
     vars: {
       '--bg-base': '#F5F3FF',
@@ -124,6 +130,7 @@ export const THEMES = [
     id: 'sunset-gold',
     name: 'Terracotta Gold',
     category: 'Light',
+    pairId: 'amber-luxe',
     preview: ['#FFFBEB', '#FFFFF5', '#CA8A04'],
     vars: {
       '--bg-base': '#FFFBEB',
@@ -144,6 +151,7 @@ export const THEMES = [
     id: 'cyber-light',
     name: 'High Tech Cyan',
     category: 'Light',
+    pairId: 'cyberpunk-neon',
     preview: ['#F0FDFA', '#F7FFEE', '#0891B2'],
     vars: {
       '--bg-base': '#F0FDFA',
@@ -164,6 +172,7 @@ export const THEMES = [
     id: 'mono-clean',
     name: 'Pure Monochrome',
     category: 'Light',
+    pairId: 'monokai-dark',
     preview: ['#FAFAFA', '#FFFFFF', '#09090B'],
     vars: {
       '--bg-base': '#FAFAFA',
@@ -184,6 +193,7 @@ export const THEMES = [
     id: 'desert-sand',
     name: 'Sahara Dune',
     category: 'Light',
+    pairId: 'synthwave-80s',
     preview: ['#F5EBE6', '#FAF4F0', '#9A3412'],
     vars: {
       '--bg-base': '#F5EBE6',
@@ -204,6 +214,7 @@ export const THEMES = [
     id: 'ocean-breeze',
     name: 'Pacific Sky',
     category: 'Light',
+    pairId: 'ocean-deep',
     preview: ['#EFF6FF', '#F8FAFF', '#0284C7'],
     vars: {
       '--bg-base': '#EFF6FF',
@@ -221,11 +232,12 @@ export const THEMES = [
     }
   },
 
-  // DARK THEMES (11)
+  // DARK THEMES
   {
     id: 'emerald-dark',
-    name: 'Emerald Studio Dark',
+    name: 'Emerald Studio Dark (Original)',
     category: 'Dark',
+    pairId: 'emerald-light',
     preview: ['#0B0D12', '#121620', '#10B981'],
     vars: {
       '--bg-base': '#0B0D12',
@@ -246,6 +258,7 @@ export const THEMES = [
     id: 'cosmic-violet',
     name: 'Cosmic Neon Purple',
     category: 'Dark',
+    pairId: 'lavender-dusk',
     preview: ['#0A0512', '#140B24', '#C084FC'],
     vars: {
       '--bg-base': '#0A0512',
@@ -266,6 +279,7 @@ export const THEMES = [
     id: 'ocean-deep',
     name: 'Midnight Abyss Cyan',
     category: 'Dark',
+    pairId: 'ocean-breeze',
     preview: ['#030712', '#0F172A', '#38BDF8'],
     vars: {
       '--bg-base': '#030712',
@@ -286,6 +300,7 @@ export const THEMES = [
     id: 'amber-luxe',
     name: 'Obsidian Amber Luxe',
     category: 'Dark',
+    pairId: 'warm-clay',
     preview: ['#0A0A0A', '#1C1917', '#F59E0B'],
     vars: {
       '--bg-base': '#0A0A0A',
@@ -306,6 +321,7 @@ export const THEMES = [
     id: 'velvet-rose',
     name: 'Velvet Crimson Rose',
     category: 'Dark',
+    pairId: 'rose-quartz',
     preview: ['#0D080A', '#1A1014', '#F43F5E'],
     vars: {
       '--bg-base': '#0D080A',
@@ -326,6 +342,7 @@ export const THEMES = [
     id: 'midnight-graphite',
     name: 'Linear Indigo Graphite',
     category: 'Dark',
+    pairId: 'blue-slate',
     preview: ['#111113', '#1C1C1E', '#6366F1'],
     vars: {
       '--bg-base': '#111113',
@@ -346,6 +363,7 @@ export const THEMES = [
     id: 'cyberpunk-neon',
     name: 'Neo Tokyo Cyberpunk',
     category: 'Dark',
+    pairId: 'cyber-light',
     preview: ['#090D16', '#101726', '#00F0FF'],
     vars: {
       '--bg-base': '#090D16',
@@ -366,6 +384,7 @@ export const THEMES = [
     id: 'forest-night',
     name: 'Pine Needle Forest',
     category: 'Dark',
+    pairId: 'soft-mint',
     preview: ['#06120E', '#0E1F18', '#34D399'],
     vars: {
       '--bg-base': '#06120E',
@@ -386,6 +405,7 @@ export const THEMES = [
     id: 'dracula',
     name: 'Dracula Gothic Pink',
     category: 'Dark',
+    pairId: 'rose-quartz',
     preview: ['#0E0B16', '#1A162B', '#FF79C6'],
     vars: {
       '--bg-base': '#0E0B16',
@@ -406,6 +426,7 @@ export const THEMES = [
     id: 'monokai-dark',
     name: 'Monokai Code Green',
     category: 'Dark',
+    pairId: 'mono-clean',
     preview: ['#121212', '#1E1E1E', '#A6E22E'],
     vars: {
       '--bg-base': '#121212',
@@ -426,6 +447,7 @@ export const THEMES = [
     id: 'synthwave-80s',
     name: 'Retro 80s Synthwave',
     category: 'Dark',
+    pairId: 'desert-sand',
     preview: ['#13091F', '#201133', '#F472B6'],
     vars: {
       '--bg-base': '#13091F',
@@ -462,4 +484,10 @@ export function applyTheme(themeId) {
 
   localStorage.setItem('daily_theme_id', theme.id);
   return theme;
+}
+
+export function toggleThemeMode(currentThemeId) {
+  const current = THEMES.find(t => t.id === currentThemeId) || THEMES[0];
+  const targetId = current.pairId || (current.category === 'Dark' ? 'emerald-light' : 'emerald-dark');
+  return applyTheme(targetId);
 }

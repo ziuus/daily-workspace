@@ -9,7 +9,7 @@ import AddUpdateModal from './components/AddUpdateModal.jsx';
 import AddTaskModal from './components/AddTaskModal.jsx';
 import TaskLogsModal from './components/TaskLogsModal.jsx';
 import ThemeSelectorModal from './components/ThemeSelectorModal.jsx';
-import { THEMES, applyTheme } from './theme/themes.js';
+import { THEMES, applyTheme, toggleThemeMode } from './theme/themes.js';
 
 export default function App() {
   const [currentThemeId, setCurrentThemeId] = useState(() => {
@@ -40,10 +40,9 @@ export default function App() {
     applyTheme(currentThemeId);
   }, [currentThemeId]);
 
-  const toggleThemeMode = () => {
-    const nextThemeId = themeMode === 'dark' ? 'emerald-light' : 'emerald-dark';
-    setCurrentThemeId(nextThemeId);
-    applyTheme(nextThemeId);
+  const handleToggleThemeMode = () => {
+    const updatedTheme = toggleThemeMode(currentThemeId);
+    setCurrentThemeId(updatedTheme.id);
   };
 
   useEffect(() => {
@@ -205,7 +204,7 @@ export default function App() {
         unreadCount={unreadCount}
         isRefreshing={isRefreshing}
         theme={themeMode}
-        onToggleTheme={toggleThemeMode}
+        onToggleTheme={handleToggleThemeMode}
       />
 
       <div className="flex-1 flex overflow-hidden z-10">
