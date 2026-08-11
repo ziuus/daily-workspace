@@ -278,38 +278,38 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
   const initialTasks = [
     {
       id: "reddit-warmup",
-      name: "Reddit Warmup & Engagement Script",
+      name: "Reddit Warmup Status Reporter",
       command_or_prompt: "python3 ~/.daily/scripts/reddit_warmup.py",
       schedule: "daily @ 09:00 IST",
       status: "active",
       last_run_at: new Date(now.getTime() - 4 * 3600 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 20 * 3600 * 1000).toISOString(),
-      last_output: "[INFO] Reddit warmup completed cleanly. Processed 14 subreddits, 0 errors."
+      last_output: "[WARMUP] Awaiting first run — reads ~/.reddit-campaign/state.md"
     },
     {
       id: "ai-news-scraper",
-      name: "Daily Tech & AI News AI Scraper",
+      name: "Daily Tech & AI News Scraper",
       command_or_prompt: "node ~/.daily/scripts/ai_scraper.js",
       schedule: "every 6h",
       status: "active",
       last_run_at: new Date(now.getTime() - 2 * 3600 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 4 * 3600 * 1000).toISOString(),
-      last_output: "[SUCCESS] Scraped HackerNews & GitHub Trending. 3 viral repos added to feed."
+      last_output: "[SCRAPER] Awaiting first run — fetches GitHub trending + HN"
     },
     {
       id: "system-watchdog",
       name: "Local Workspace & Server Health Monitor",
-      command_or_prompt: "daily watchdog",
+      command_or_prompt: "node ~/.daily/scripts/watchdog.js",
       schedule: "every 30m",
       status: "active",
       last_run_at: new Date(now.getTime() - 15 * 60 * 1000).toISOString(),
       next_run_at: new Date(now.getTime() + 15 * 60 * 1000).toISOString(),
-      last_output: "[HEALTH] System memory: 34% used. MCP Server: Online (Stdio). Database: WAL OK."
+      last_output: "[WATCHDOG] Awaiting first run — reports real memory/disk/DB health"
     },
     {
       id: "repo-star-tracker",
       name: "Trending Open-Source Velocity Monitor",
-      command_or_prompt: "daily scan-repos --threshold 300",
+      command_or_prompt: "node ~/.daily/scripts/repo_star_tracker.js",
       schedule: "daily @ 14:00 IST",
       status: "paused",
       last_run_at: new Date(now.getTime() - 28 * 3600 * 1000).toISOString(),

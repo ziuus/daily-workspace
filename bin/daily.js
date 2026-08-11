@@ -52,11 +52,21 @@ async function main() {
       break;
 
     case 'watchdog':
-      console.log('[WATCHDOG] Daily workspace health nominal. DB: WAL OK. Server: Active.');
+      // Real health check — delegate to the script
+      require('node:child_process').spawnSync(
+        'node',
+        [path.join(__dirname, '..', 'scripts', 'watchdog.js')],
+        { stdio: 'inherit' }
+      );
       break;
 
     case 'scan-repos':
-      console.log('[SCAN-REPOS] Scanned trending repositories. All clear.');
+      // Real GitHub trending scan — delegate to the scraper script
+      require('node:child_process').spawnSync(
+        'node',
+        [path.join(__dirname, '..', 'scripts', 'repo_star_tracker.js')],
+        { stdio: 'inherit' }
+      );
       break;
 
     case 'help':

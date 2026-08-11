@@ -14,17 +14,8 @@ function runTask(taskId) {
     db.updateTask(taskId, { status: 'running', last_run_at: nowIso });
 
     const startTime = Date.now();
-    let commandToExec = task.command_or_prompt;
-
-    // Handle internal commands like "daily watchdog" or "daily scan-repos"
-    if (commandToExec.startsWith('daily ')) {
-      const sub = commandToExec.replace(/^daily\s+/, '');
-      if (sub.includes('watchdog')) {
-        commandToExec = `node -e "console.log('[WATCHDOG] Workspace check passed. Memory: OK, DB: WAL nominal, MCP: Stdio active.')"`;
-      } else if (sub.includes('scan-repos')) {
-        commandToExec = `node -e "console.log('[SCAN-REPOS] Scanned 45 trending GitHub repos. 0 new explosive velocity spikes found.')"`;
-      }
-    }
+    // Run the task's real command_or_prompt as-is. No hardcoded substitutions.
+    const commandToExec = task.command_or_prompt;
 
     exec(commandToExec, { timeout: 30000 }, (error, stdout, stderr) => {
       const durationMs = Date.now() - startTime;
