@@ -24,7 +24,7 @@ export default function ReadingCanvas({
 
   if (!update) {
     return (
-      <main className="flex-1 bg-[#FAF9F5] dark:bg-[#0A0C10] flex flex-col items-center justify-center text-center p-8 select-none">
+      <main className="flex-1 bg-[#FAF9F6] dark:bg-[#0B0D12] flex flex-col items-center justify-center text-center p-8 select-none">
         <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 shadow-2xs">
           <Sparkles className="w-6 h-6" />
         </div>
@@ -45,48 +45,32 @@ export default function ReadingCanvas({
   };
 
   return (
-    <main className="flex-1 bg-[#FAF9F5] dark:bg-[#0A0C10] flex flex-col overflow-hidden">
-      {/* Article Header Controls */}
-      <header className="px-10 py-5 border-b border-[#E7E5E4] dark:border-[#242936] bg-white/40 dark:bg-slate-900/20 flex items-start justify-between gap-6 shrink-0">
-        <div className="space-y-2 flex-1 min-w-0">
-          <div className="flex items-center space-x-2 text-xs font-mono">
-            <span className="px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-800 dark:text-emerald-300">
-              {update.category.toUpperCase().replace('_', ' ')}
-            </span>
-            <span className="text-stone-300 dark:text-slate-700">•</span>
-            <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
-              {new Date(update.created_at).toLocaleString()}
-            </span>
-            <span className="text-stone-300 dark:text-slate-700">•</span>
-            <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1 font-mono">
-              <Bot className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>{update.source_agent}</span>
-            </span>
-          </div>
-
-          <h1 className="text-2xl lg:text-3xl font-bold text-stone-900 dark:text-white leading-tight tracking-tight">
-            {update.title}
-          </h1>
-
-          {update.tags && update.tags.length > 0 && (
-            <div className="flex items-center space-x-1.5 pt-0.5">
-              {update.tags.map(tag => (
-                <span key={tag} className="text-xs font-mono text-stone-600 dark:text-slate-400 bg-stone-200/60 dark:bg-[#191D28] px-2 py-0.5 rounded">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+    <main className="flex-1 bg-[#FAF9F6] dark:bg-[#0B0D12] flex flex-col overflow-hidden">
+      {/* Top Action Bar */}
+      <header className="px-10 py-4 border-b border-[#E7E5E4] dark:border-[#232938] bg-white/40 dark:bg-slate-900/20 flex items-center justify-between gap-6 shrink-0">
+        <div className="flex items-center space-x-3 text-xs font-mono">
+          <span className="px-2.5 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-800 dark:text-emerald-300">
+            {update.category.toUpperCase().replace('_', ' ')}
+          </span>
+          <span className="text-stone-300 dark:text-slate-700">•</span>
+          <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
+            {new Date(update.created_at).toLocaleString()}
+          </span>
+          <span className="text-stone-300 dark:text-slate-700">•</span>
+          <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1">
+            <Bot className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>{update.source_agent}</span>
+          </span>
         </div>
 
-        {/* Action Bar */}
-        <div className="flex items-center space-x-2 shrink-0 pt-1">
+        {/* Action Controls */}
+        <div className="flex items-center space-x-2 shrink-0">
           <button
             onClick={() => onToggleRead(update.id, isRead ? 0 : 1)}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
               isRead 
-                ? 'bg-stone-200/70 dark:bg-[#191D28] text-stone-600 dark:text-slate-400 border-stone-300 dark:border-[#242936]'
+                ? 'bg-stone-200/60 dark:bg-[#191E2B] text-stone-600 dark:text-slate-400 border-stone-300 dark:border-[#232938]'
                 : 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
             }`}
           >
@@ -97,7 +81,7 @@ export default function ReadingCanvas({
           <button
             onClick={handleCopy}
             title="Copy Raw Markdown"
-            className="p-1.5 rounded-md bg-stone-200/70 dark:bg-[#191D28] border border-stone-300 dark:border-[#242936] text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white transition-colors"
+            className="p-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-300 dark:border-[#232938] text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -105,53 +89,71 @@ export default function ReadingCanvas({
           <button
             onClick={() => onDeleteUpdate(update.id)}
             title="Delete Entry"
-            className="p-1.5 rounded-md bg-stone-200/70 dark:bg-[#191D28] border border-stone-300 dark:border-[#242936] text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition-colors"
+            className="p-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-300 dark:border-[#232938] text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition-colors"
           >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </header>
 
-      {/* Main Reading View */}
-      <div className="flex-1 overflow-y-auto px-12 py-8 space-y-6">
-        {/* Simple, Borderless Inline Repository Header (GitHub / Vercel style) */}
-        {update.category === 'os_project' && update.metadata && update.metadata.repo_url && (
-          <div className="pb-4 border-b border-[#E7E5E4] dark:border-[#242936] flex items-center justify-between gap-4">
-            <div className="flex items-center space-x-3 text-xs font-mono">
-              <span className="flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400">
-                <Flame className="w-4 h-4 fill-current" />
-                <span>GITHUB REPO</span>
-              </span>
-              <span className="text-stone-300 dark:text-slate-700">•</span>
-              <span className="text-stone-900 dark:text-white font-semibold">
-                {update.metadata.repo_url}
-              </span>
-              {update.metadata.star_growth && (
-                <>
-                  <span className="text-stone-300 dark:text-slate-700">•</span>
-                  <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-current" />
-                    {update.metadata.star_growth}
+      {/* Main Focus Reading Container */}
+      <div className="flex-1 overflow-y-auto px-12 py-10">
+        <div className="max-w-2xl mx-auto space-y-8">
+          <div className="space-y-3">
+            <h1 className="text-3xl font-extrabold text-stone-900 dark:text-white leading-tight tracking-tight">
+              {update.title}
+            </h1>
+
+            {update.tags && update.tags.length > 0 && (
+              <div className="flex items-center space-x-1.5 pt-1">
+                {update.tags.map(tag => (
+                  <span key={tag} className="text-xs font-mono text-stone-600 dark:text-slate-400 bg-stone-200/50 dark:bg-[#191E2B] px-2 py-0.5 rounded">
+                    #{tag}
                   </span>
-                </>
-              )}
-            </div>
-
-            <a
-              href={update.metadata.repo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1.5 text-xs font-mono font-medium text-stone-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-            >
-              <span>View Repository</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+                ))}
+              </div>
+            )}
           </div>
-        )}
 
-        <article className="markdown-body max-w-2xl">
-          <MarkdownRenderer content={update.markdown_content} />
-        </article>
+          {/* GitHub Repository Bar */}
+          {update.category === 'os_project' && update.metadata && update.metadata.repo_url && (
+            <div className="pb-4 border-b border-[#E7E5E4] dark:border-[#232938] flex items-center justify-between gap-4">
+              <div className="flex items-center space-x-3 text-xs font-mono">
+                <span className="flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400">
+                  <Flame className="w-4 h-4 fill-current" />
+                  <span>GITHUB REPO</span>
+                </span>
+                <span className="text-stone-300 dark:text-slate-700">•</span>
+                <span className="text-stone-900 dark:text-white font-semibold">
+                  {update.metadata.repo_url}
+                </span>
+                {update.metadata.star_growth && (
+                  <>
+                    <span className="text-stone-300 dark:text-slate-700">•</span>
+                    <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-current" />
+                      {update.metadata.star_growth}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <a
+                href={update.metadata.repo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1.5 text-xs font-mono font-medium text-stone-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              >
+                <span>View Repository</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          )}
+
+          <article className="markdown-body">
+            <MarkdownRenderer content={update.markdown_content} />
+          </article>
+        </div>
       </div>
     </main>
   );

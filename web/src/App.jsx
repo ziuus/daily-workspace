@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header.jsx';
 import LeftSidebar from './components/LeftSidebar.jsx';
 import ReadingCanvas from './components/ReadingCanvas.jsx';
-import RightSidebar from './components/RightSidebar.jsx';
 import TaskManagementView from './components/TaskManagementView.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import AddUpdateModal from './components/AddUpdateModal.jsx';
@@ -187,25 +185,30 @@ export default function App() {
     }
   };
 
-  const unreadCount = updates.filter(u => u.read_status === 0).length;
-
   return (
-    <div className="h-screen w-screen flex flex-col bg-[#FAF9F6] dark:bg-[#0B0D12] text-stone-900 dark:text-slate-100 overflow-hidden font-sans antialiased aurora-bg">
+    <div className="h-screen w-screen flex bg-[#FAF9F6] dark:bg-[#0B0D12] text-stone-900 dark:text-slate-100 overflow-hidden font-sans antialiased aurora-bg">
       <div className="noise-overlay" />
-      <Header
+      
+      {/* 2-Pane Architecture: Left Sidebar + Main Canvas */}
+      <LeftSidebar
+        updates={updates}
+        selectedUpdate={selectedUpdate}
+        onSelectUpdate={setSelectedUpdate}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        filterRead={filterRead}
+        setFilterRead={setFilterRead}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenAddUpdate={() => setIsAddUpdateOpen(true)}
-        onOpenAddTask={() => setIsAddTaskOpen(true)}
         onRefresh={fetchData}
-        unreadCount={unreadCount}
         isRefreshing={isRefreshing}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
 
-      <div className="flex-1 flex overflow-hidden z-10">
+      <div className="flex-1 flex flex-col overflow-hidden z-10">
         {activeTab === 'tasks' ? (
           <TaskManagementView
             tasks={tasks}
@@ -216,32 +219,11 @@ export default function App() {
             onOpenAddTask={() => setIsAddTaskOpen(true)}
           />
         ) : (
-          <>
-            <LeftSidebar
-              updates={updates}
-              selectedUpdate={selectedUpdate}
-              onSelectUpdate={setSelectedUpdate}
-              filterRead={filterRead}
-              setFilterRead={setFilterRead}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-            />
-
-            <ReadingCanvas
-              update={selectedUpdate}
-              onToggleRead={handleToggleRead}
-              onDeleteUpdate={handleDeleteUpdate}
-            />
-
-            <RightSidebar
-              stats={stats}
-              tasks={tasks}
-              onTriggerTask={handleTriggerTask}
-              onToggleTaskPause={handleToggleTaskPause}
-              onViewLogs={(t) => setActiveLogTask(t)}
-              onOpenAddTask={() => setIsAddTaskOpen(true)}
-            />
-          </>
+          <ReadingCanvas
+            update={selectedUpdate}
+            onToggleRead={handleToggleRead}
+            onDeleteUpdate={handleDeleteUpdate}
+          />
         )}
       </div>
 
