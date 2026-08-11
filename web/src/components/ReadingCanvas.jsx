@@ -24,12 +24,12 @@ export default function ReadingCanvas({
 
   if (!update) {
     return (
-      <main className="flex-1 bg-white dark:bg-[#0C0E12] flex flex-col items-center justify-center text-center p-8 select-none">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 shadow-xs">
+      <main className="flex-1 bg-[#FAF9F5] dark:bg-[#0A0C10] flex flex-col items-center justify-center text-center p-8 select-none">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 shadow-2xs">
           <Sparkles className="w-6 h-6" />
         </div>
-        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 font-mono">Daily Workspace Intelligence</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-xs max-w-sm leading-relaxed">
+        <h3 className="text-base font-bold text-stone-900 dark:text-white mb-1 font-mono">Daily Workspace Intelligence</h3>
+        <p className="text-stone-500 dark:text-slate-400 text-xs max-w-sm leading-relaxed">
           Select an entry from the feed timeline to read full analysis, open-source metrics, or AI tool updates.
         </p>
       </main>
@@ -45,34 +45,34 @@ export default function ReadingCanvas({
   };
 
   return (
-    <main className="flex-1 bg-white dark:bg-[#0C0E12] flex flex-col overflow-hidden">
-      {/* Header Bar */}
-      <header className="px-8 py-5 border-b border-slate-200/80 dark:border-[#222732] bg-slate-50/40 dark:bg-slate-900/20 flex items-start justify-between gap-6 shrink-0">
+    <main className="flex-1 bg-[#FAF9F5] dark:bg-[#0A0C10] flex flex-col overflow-hidden">
+      {/* Article Header Controls */}
+      <header className="px-10 py-5 border-b border-[#E7E5E4] dark:border-[#242936] bg-white/40 dark:bg-slate-900/20 flex items-start justify-between gap-6 shrink-0">
         <div className="space-y-2 flex-1 min-w-0">
           <div className="flex items-center space-x-2 text-xs font-mono">
-            <span className="px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+            <span className="px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-800 dark:text-emerald-300">
               {update.category.toUpperCase().replace('_', ' ')}
             </span>
-            <span className="text-slate-300 dark:text-slate-700">•</span>
-            <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-stone-300 dark:text-slate-700">•</span>
+            <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
               {new Date(update.created_at).toLocaleString()}
             </span>
-            <span className="text-slate-300 dark:text-slate-700">•</span>
-            <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              <Bot className="w-3.5 h-3.5 text-emerald-500" />
+            <span className="text-stone-300 dark:text-slate-700">•</span>
+            <span className="text-stone-500 dark:text-slate-400 flex items-center gap-1 font-mono">
+              <Bot className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>{update.source_agent}</span>
             </span>
           </div>
 
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
+          <h1 className="text-2xl lg:text-3xl font-bold text-stone-900 dark:text-white leading-tight tracking-tight">
             {update.title}
           </h1>
 
           {update.tags && update.tags.length > 0 && (
-            <div className="flex items-center space-x-1.5 pt-1">
+            <div className="flex items-center space-x-1.5 pt-0.5">
               {update.tags.map(tag => (
-                <span key={tag} className="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-[#1A1E26] px-2 py-0.5 rounded border border-slate-200/80 dark:border-white/5">
+                <span key={tag} className="text-xs font-mono text-stone-600 dark:text-slate-400 bg-stone-200/60 dark:bg-[#191D28] px-2 py-0.5 rounded">
                   #{tag}
                 </span>
               ))}
@@ -80,13 +80,13 @@ export default function ReadingCanvas({
           )}
         </div>
 
-        {/* Action controls */}
+        {/* Action Bar */}
         <div className="flex items-center space-x-2 shrink-0 pt-1">
           <button
             onClick={() => onToggleRead(update.id, isRead ? 0 : 1)}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
               isRead 
-                ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10'
+                ? 'bg-stone-200/70 dark:bg-[#191D28] text-stone-600 dark:text-slate-400 border-stone-300 dark:border-[#242936]'
                 : 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
             }`}
           >
@@ -97,7 +97,7 @@ export default function ReadingCanvas({
           <button
             onClick={handleCopy}
             title="Copy Raw Markdown"
-            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="p-1.5 rounded-md bg-stone-200/70 dark:bg-[#191D28] border border-stone-300 dark:border-[#242936] text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -105,47 +105,43 @@ export default function ReadingCanvas({
           <button
             onClick={() => onDeleteUpdate(update.id)}
             title="Delete Entry"
-            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition-colors"
+            className="p-1.5 rounded-md bg-stone-200/70 dark:bg-[#191D28] border border-stone-300 dark:border-[#242936] text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition-colors"
           >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </header>
 
-      {/* Content Canvas */}
-      <div className="flex-1 overflow-y-auto px-10 py-8 space-y-6">
-        {/* Sleek GitHub Repo Banner (if os_project) */}
+      {/* Main Reading View */}
+      <div className="flex-1 overflow-y-auto px-12 py-8 space-y-6">
+        {/* Simple, Borderless Inline Repository Header (GitHub / Vercel style) */}
         {update.category === 'os_project' && update.metadata && update.metadata.repo_url && (
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#141822] border border-slate-200 dark:border-[#222732] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center space-x-2 text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase">
+          <div className="pb-4 border-b border-[#E7E5E4] dark:border-[#242936] flex items-center justify-between gap-4">
+            <div className="flex items-center space-x-3 text-xs font-mono">
+              <span className="flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400">
                 <Flame className="w-4 h-4 fill-current" />
-                <span>Exploding Open-Source Repository</span>
-              </div>
-              <p className="text-sm font-semibold text-slate-900 dark:text-white font-mono">
+                <span>GITHUB REPO</span>
+              </span>
+              <span className="text-stone-300 dark:text-slate-700">•</span>
+              <span className="text-stone-900 dark:text-white font-semibold">
                 {update.metadata.repo_url}
-              </p>
-              <div className="flex items-center space-x-4 text-xs font-mono text-slate-500 dark:text-slate-400 pt-0.5">
-                {update.metadata.star_growth && (
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+              </span>
+              {update.metadata.star_growth && (
+                <>
+                  <span className="text-stone-300 dark:text-slate-700">•</span>
+                  <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
                     <Star className="w-3 h-3 fill-current" />
                     {update.metadata.star_growth}
                   </span>
-                )}
-                {update.metadata.language && (
-                  <span className="flex items-center gap-1">
-                    <Code2 className="w-3 h-3 text-sky-500" />
-                    {update.metadata.language}
-                  </span>
-                )}
-              </div>
+                </>
+              )}
             </div>
 
             <a
               href={update.metadata.repo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-1.5 px-4 py-2 rounded-lg bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-medium text-xs shadow-xs transition-all shrink-0 font-mono"
+              className="flex items-center space-x-1.5 text-xs font-mono font-medium text-stone-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               <span>View Repository</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -153,7 +149,7 @@ export default function ReadingCanvas({
           </div>
         )}
 
-        <article className="markdown-body max-w-3xl">
+        <article className="markdown-body max-w-2xl">
           <MarkdownRenderer content={update.markdown_content} />
         </article>
       </div>
