@@ -21,14 +21,14 @@ export default function RightSidebar({
     <aside 
       className="w-80 border-l flex flex-col shrink-0 overflow-hidden select-none transition-colors duration-200"
       style={{
-        backgroundColor: 'var(--bg-base)',
+        backgroundColor: 'var(--bg-surface)',
         borderColor: 'var(--border)'
       }}
     >
       {/* Workspace Metrics */}
       <div 
         className="p-4 border-b space-y-3"
-        style={{ borderColor: 'var(--border)' }}
+        style={{ borderColor: 'var(--border-subtle)' }}
       >
         <div className="flex items-center justify-between">
           <h3 
@@ -69,14 +69,14 @@ export default function RightSidebar({
             style={{ borderColor: 'var(--border-subtle)' }}
           >
             <span style={{ color: 'var(--text-secondary)' }}>Unread Feed</span>
-            <span className="font-bold text-amber-600">
+            <span className="font-bold" style={{ color: 'var(--accent)' }}>
               {stats?.updates?.unread || 0}
             </span>
           </div>
 
           <div className="flex items-center justify-between py-1">
             <span style={{ color: 'var(--text-secondary)' }}>MCP Server</span>
-            <span className="font-bold text-purple-600 flex items-center gap-1">
+            <span className="font-bold flex items-center gap-1" style={{ color: 'var(--accent)' }}>
               <Server className="w-3 h-3" />
               <span>Stdio</span>
             </span>
@@ -87,7 +87,7 @@ export default function RightSidebar({
       {/* Autonomous Tasks Header */}
       <div 
         className="p-3 border-b flex items-center justify-between"
-        style={{ borderColor: 'var(--border)' }}
+        style={{ borderColor: 'var(--border-subtle)' }}
       >
         <div className="flex items-center space-x-1.5">
           <Terminal className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
@@ -128,9 +128,10 @@ export default function RightSidebar({
             return (
               <div
                 key={task.id}
-                className="p-3 rounded-lg transition-colors space-y-2"
+                className="p-3 rounded-lg transition-colors space-y-2 border"
                 style={{
-                  backgroundColor: 'var(--bg-surface)'
+                  backgroundColor: 'var(--bg-base)',
+                  borderColor: 'var(--border-subtle)'
                 }}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -138,7 +139,7 @@ export default function RightSidebar({
                     <span 
                       className={`w-2 h-2 rounded-full shrink-0 ${isRunning ? 'animate-pulse' : ''}`}
                       style={{
-                        backgroundColor: isRunning ? '#38BDF8' : isActive ? 'var(--accent)' : isError ? '#F43F5E' : 'var(--text-muted)'
+                        backgroundColor: isRunning ? 'var(--accent)' : isActive ? 'var(--accent)' : isError ? '#F43F5E' : 'var(--text-muted)'
                       }}
                     />
                     <span className="text-xs font-mono font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
@@ -162,7 +163,7 @@ export default function RightSidebar({
                   <button
                     onClick={() => onTriggerTask(task.id)}
                     disabled={isRunning}
-                    className="flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium transition-colors disabled:opacity-50"
+                    className="flex items-center space-x-1 px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-colors disabled:opacity-50"
                     style={{
                       backgroundColor: 'var(--accent)',
                       color: '#FFFFFF'
@@ -179,7 +180,7 @@ export default function RightSidebar({
                       style={{ color: 'var(--text-secondary)' }}
                       title={isActive ? 'Pause Task' : 'Resume Task'}
                     >
-                      {isActive ? <Pause className="w-3 h-3 text-amber-600" /> : <Play className="w-3 h-3 text-emerald-600" />}
+                      {isActive ? <Pause className="w-3 h-3" style={{ color: 'var(--accent)' }} /> : <Play className="w-3 h-3" style={{ color: 'var(--accent)' }} />}
                     </button>
                     
                     <button

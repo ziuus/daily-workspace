@@ -10,12 +10,12 @@ export default function DailyLogo({ className = "w-7 h-7" }) {
     >
       <defs>
         <linearGradient id="dailyGrad" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#10B981" />
-          <stop offset="1" stopColor="#059669" />
+          <stop stopColor="var(--accent)" />
+          <stop offset="1" stopColor="var(--accent-text)" />
         </linearGradient>
         <linearGradient id="dailyAccent" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#34D399" />
-          <stop offset="1" stopColor="#38BDF8" />
+          <stop stopColor="var(--accent-text)" />
+          <stop offset="1" stopColor="var(--accent)" />
         </linearGradient>
       </defs>
       
@@ -27,10 +27,10 @@ export default function DailyLogo({ className = "w-7 h-7" }) {
         height="28" 
         rx="8" 
         fill="url(#dailyGrad)" 
-        fillOpacity="0.12" 
+        fillOpacity="0.15" 
         stroke="url(#dailyGrad)" 
         strokeWidth="1.5"
-        strokeOpacity="0.3"
+        strokeOpacity="0.4"
       />
       
       {/* Geometric 'D' Monogram */}
@@ -55,7 +55,7 @@ export default function DailyLogo({ className = "w-7 h-7" }) {
         cx="19" 
         cy="12" 
         r="1.5" 
-        fill="#34D399" 
+        fill="var(--accent)" 
       />
     </svg>
   );

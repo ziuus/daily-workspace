@@ -22,13 +22,13 @@ export default function LeftSidebar({
   const getCategoryTag = (cat) => {
     switch (cat) {
       case 'os_project':
-        return { label: 'OS REPO', text: 'var(--accent)' };
+        return { label: 'OS REPO' };
       case 'ai_tool':
-        return { label: 'AI TOOL', text: '#9333EA' };
+        return { label: 'AI TOOL' };
       case 'tech_news':
-        return { label: 'NEWS', text: '#0284C7' };
+        return { label: 'NEWS' };
       default:
-        return { label: 'UPDATE', text: '#D97706' };
+        return { label: 'UPDATE' };
     }
   };
 
@@ -51,7 +51,7 @@ export default function LeftSidebar({
     <aside 
       className="w-80 border-r flex flex-col shrink-0 overflow-hidden select-none transition-colors duration-200"
       style={{
-        backgroundColor: 'var(--bg-base)',
+        backgroundColor: 'var(--bg-surface)',
         borderColor: 'var(--border)'
       }}
     >
@@ -69,7 +69,7 @@ export default function LeftSidebar({
             placeholder="Search feed items..."
             className="w-full pl-9 pr-3 py-1.5 rounded-md text-xs transition-colors focus:outline-none"
             style={{
-              backgroundColor: 'var(--bg-surface)',
+              backgroundColor: 'var(--bg-subtle)',
               borderColor: 'var(--border)',
               color: 'var(--text-primary)'
             }}
@@ -146,7 +146,7 @@ export default function LeftSidebar({
                       className="px-4 py-2.5 transition-all cursor-pointer relative border-l-2"
                       style={{
                         borderColor: isSelected ? 'var(--accent)' : 'transparent',
-                        backgroundColor: isSelected ? 'var(--bg-surface)' : 'transparent'
+                        backgroundColor: isSelected ? 'var(--bg-base)' : 'transparent'
                       }}
                     >
                       {isUnread && (
@@ -154,7 +154,7 @@ export default function LeftSidebar({
                       )}
 
                       <div className="flex items-center space-x-2 mb-0.5">
-                        <span className="text-[9px] font-bold font-mono" style={{ color: tagInfo.text }}>
+                        <span className="text-[9px] font-bold font-mono" style={{ color: 'var(--accent)' }}>
                           {tagInfo.label}
                         </span>
                         <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>
