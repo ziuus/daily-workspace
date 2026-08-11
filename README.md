@@ -44,7 +44,7 @@
 * **🎨 22-Theme Studio & Dynamic Workspace Engine**: 22 hand-curated color presets (11 Light / 11 Dark) that transform 100% of the workspace interface (headers, sidebars, badges, buttons, dots, and surfaces).
 * **☀️/🌙 Paired Light & Dark Mode Toggling**: The Sun/Moon header button smoothly toggles between paired Light and Dark versions of your active theme family (e.g. *Rose Quartz* ↔ *Velvet Crimson Rose*).
 * **🤖 Autonomous Task & Cron Hub**: Manage background scripts (Python scripts, scrapers, system health watchdogs). Monitor status (`active`, `paused`, `running`, `error`), last/next run times, and live terminal logs.
-* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents (Claude Desktop, Cursor, Antigravity/Gemini, Hermes, Windsurf, Roo Code, Goose) to push markdown updates, read feed entries, and trigger tasks on demand.
+* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents (Claude Desktop, Cursor, Antigravity/Gemini, Hermes, Windsurf, Roo Code, Goose, Continue, Zed, Python/Node SDKs) to push markdown updates, read feed entries, and trigger tasks on demand.
 * **✍️ Rich GFM Markdown Renderer**: Built-in renderer with code syntax highlighting, copy-to-clipboard buttons, formatted tables, task checklists, and GFM callout blocks (`[!NOTE]`, `[!TIP]`, `[!WARNING]`).
 * **📦 Zero-Dependency SQLite Storage**: Powered by Node.js native `node:sqlite` for high-performance WAL-mode storage in `~/.daily/data/daily.db`.
 
@@ -90,38 +90,13 @@ The `daily` binary provides full terminal control over feeds, tasks, background 
 | `daily serve` | Runs the REST API server and task scheduler in the foreground. |
 | `daily mcp` | Launches the Stdio MCP Server for AI agents. |
 
-### CLI Examples
-
-```bash
-# Start or restart background daemon
-daily restart
-
-# Check daemon health
-daily status
-
-# Add a new feed entry
-daily add --title "DeepSeek-V3 Architecture Deep Dive" \
-          --category ai_tool \
-          --content "### DeepSeek-V3\nMulti-Head Latent Attention (MLA) breakdown." \
-          --tags "deepseek,ai,architecture"
-
-# Trigger a background script
-daily task trigger reddit-warmup
-
-# Register a custom cron script
-daily task add --id "market-watchdog" \
-               --name "Market Tracker Script" \
-               --cmd "python3 ~/.daily/scripts/market.py" \
-               --schedule "every 1h"
-```
-
 ---
 
 ## 🤖 MCP Server Integration (`daily-mcp`)
 
-**Daily** includes a built-in Stdio MCP Server so any AI agent can read feed entries, post new intelligence, list tasks, and trigger background execution.
+*For the full multi-framework integration guide, see [`MCP_GUIDE.md`](MCP_GUIDE.md).*
 
-### Configuration Snippets
+### Quick Configuration Snippets
 
 #### 1. Claude Desktop (`claude_desktop_config.json`)
 
@@ -167,6 +142,13 @@ mcp_servers:
 goose mcp add daily -- npx -y @ziuus/daily mcp
 ```
 
+#### 5. Python Agent SDK (`mcp` package)
+
+```python
+from mcp import StdioServerParameters
+server_params = StdioServerParameters(command="npx", args=["-y", "@ziuus/daily", "mcp"])
+```
+
 ### Exposed MCP Tools
 
 | Tool Name | Parameters | Description |
@@ -203,45 +185,6 @@ The local HTTP server on port `3456` exposes JSON REST endpoints:
 * `POST /api/tasks/:id/trigger` — Execute task immediately.
 * `GET /api/tasks/:id/logs` — Fetch execution log history for a task.
 * `DELETE /api/tasks/:id` — Delete a task registration.
-
----
-
-## 📁 Storage & Data Isolation
-
-All runtime database state, task logs, and configuration remain isolated in `~/.daily/`:
-
-```
-~/.daily/
-├── data/
-│   ├── daily.db               # SQLite WAL database (updates, tasks, execution logs)
-│   └── config.json            # User & server configuration
-├── web/
-│   └── dist/                  # Built production Web Dashboard assets
-├── mcp/
-│   └── index.js               # Stdio MCP Server
-├── server/
-│   ├── index.js               # REST API & static file server
-│   └── scheduler.js           # Autonomous background task scheduler
-└── bin/
-    └── daily.js               # Global CLI entrypoint
-```
-
----
-
-## 🛠️ Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/ziuus/daily-workspace.git
-cd daily-workspace
-
-# Install dependencies & build Web Dashboard frontend
-npm install
-npm run build:web
-
-# Test the backend API server locally
-node server/index.js
-```
 
 ---
 
