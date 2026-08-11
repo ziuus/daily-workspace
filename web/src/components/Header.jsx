@@ -37,7 +37,13 @@ export default function Header({
   ];
 
   return (
-    <header className="h-14 border-b border-[#E7E5E4] dark:border-[#232938] bg-white/90 dark:bg-[#121620]/90 glass-header px-6 flex items-center justify-between z-30 shrink-0 select-none">
+    <header 
+      className="h-14 border-b px-6 flex items-center justify-between z-30 shrink-0 select-none transition-colors duration-200"
+      style={{
+        backgroundColor: 'var(--bg-surface)',
+        borderColor: 'var(--border)'
+      }}
+    >
       {/* Brand & Tabs */}
       <div className="flex items-center space-x-8">
         <div 
@@ -45,14 +51,23 @@ export default function Header({
           onClick={() => setActiveTab('all')}
         >
           <DailyLogo className="w-7 h-7 transform group-hover:scale-105 transition-transform duration-200" />
-          <span className="font-extrabold tracking-tight text-stone-900 dark:text-white text-base font-mono flex items-center gap-2">
+          <span 
+            className="font-extrabold tracking-tight text-base font-mono flex items-center gap-2"
+            style={{ color: 'var(--text-primary)' }}
+          >
             DAILY
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-status-pulse inline-block"></span>
+            <span className="w-2 h-2 rounded-full animate-status-pulse inline-block" style={{ backgroundColor: 'var(--accent)' }}></span>
           </span>
         </div>
 
         {/* Minimal Segmented Navigation */}
-        <nav className="flex items-center space-x-1 bg-stone-200/60 dark:bg-[#191E2B] p-1 rounded-lg border border-stone-200/80 dark:border-white/5">
+        <nav 
+          className="flex items-center space-x-1 p-1 rounded-lg border"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -60,16 +75,23 @@ export default function Header({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all ${
-                  isActive
-                    ? 'bg-white dark:bg-[#232938] text-stone-900 dark:text-white shadow-xs font-semibold'
-                    : 'text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-slate-200'
-                }`}
+                className="flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all"
+                style={{
+                  backgroundColor: isActive ? 'var(--bg-surface)' : 'transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  fontWeight: isActive ? 600 : 500
+                }}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-stone-400 dark:text-slate-500'}`} />
+                <Icon className="w-3.5 h-3.5" style={{ color: isActive ? 'var(--accent)' : 'var(--text-muted)' }} />
                 <span>{tab.label}</span>
                 {tab.badge && (
-                  <span className="ml-1 px-1.5 py-0.2 text-[10px] font-bold font-mono rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300">
+                  <span 
+                    className="ml-1 px-1.5 py-0.2 text-[10px] font-bold font-mono rounded-full"
+                    style={{
+                      backgroundColor: 'var(--accent-bg)',
+                      color: 'var(--accent-text)'
+                    }}
+                  >
                     {tab.badge}
                   </span>
                 )}
@@ -84,38 +106,66 @@ export default function Header({
         {/* Search Bar Button */}
         <button
           onClick={onOpenSearch}
-          className="flex items-center space-x-3 px-3 py-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-slate-200 hover:border-stone-300 text-xs font-mono transition-all"
+          className="flex items-center space-x-3 px-3 py-1.5 rounded-lg border text-xs font-mono transition-all"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border)',
+            color: 'var(--text-secondary)'
+          }}
         >
-          <Search className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
+          <Search className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
           <span>Search feed & tasks...</span>
-          <kbd className="px-1.5 py-0.5 text-[10px] bg-stone-200 dark:bg-slate-800 rounded text-stone-600 dark:text-slate-400 font-mono">
+          <kbd 
+            className="px-1.5 py-0.5 text-[10px] rounded font-mono"
+            style={{
+              backgroundColor: 'var(--bg-hover)',
+              color: 'var(--text-secondary)'
+            }}
+          >
             ⌘K
           </kbd>
         </button>
 
         {/* Live MCP Indicator */}
-        <div className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-stone-200/40 dark:bg-slate-900/60 border border-stone-200/60 dark:border-white/5 text-[11px] font-mono text-stone-500 dark:text-slate-400">
-          <Bot className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+        <div 
+          className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-mono"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border-subtle)',
+            color: 'var(--text-secondary)'
+          }}
+        >
+          <Bot className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
           <span>MCP Stdio</span>
         </div>
 
         {/* Theme Palette Modal Button */}
         <button
           onClick={onOpenThemeSelector}
-          title="Open Theme Palette Studio (22 Themes)"
-          className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs font-mono"
+          title="Open Workspace Theme Studio (22 Themes)"
+          className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-mono transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border)',
+            color: 'var(--text-primary)'
+          }}
         >
-          <Palette className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          <span className="hidden sm:inline">Themes</span>
+          <Palette className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+          <span className="hidden sm:inline font-bold">Themes</span>
         </button>
 
         {/* Theme Switcher Fast Toggle Button */}
         <button
           onClick={onToggleTheme}
           title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-          className="p-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white transition-colors"
+          className="p-1.5 rounded-lg border transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border)',
+            color: 'var(--text-secondary)'
+          }}
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-stone-600" />}
+          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />}
         </button>
 
         {/* Refresh Data */}
@@ -123,16 +173,25 @@ export default function Header({
           onClick={onRefresh}
           disabled={isRefreshing}
           title="Refresh Feed"
-          className="p-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-slate-200 transition-colors disabled:opacity-50"
+          className="p-1.5 rounded-lg border transition-colors disabled:opacity-50"
+          style={{
+            backgroundColor: 'var(--bg-subtle)',
+            borderColor: 'var(--border)',
+            color: 'var(--text-secondary)'
+          }}
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-emerald-600 dark:text-emerald-400' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} style={{ color: isRefreshing ? 'var(--accent)' : 'inherit' }} />
         </button>
 
         {/* Primary Action Buttons */}
         <div className="flex items-center space-x-2 pl-1">
           <button
             onClick={onOpenAddUpdate}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-xs transition-all"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-white font-medium text-xs shadow-xs transition-all"
+            style={{
+              backgroundColor: 'var(--accent)',
+              color: '#FFFFFF'
+            }}
           >
             <Plus className="w-3.5 h-3.5" />
             <span>New Entry</span>

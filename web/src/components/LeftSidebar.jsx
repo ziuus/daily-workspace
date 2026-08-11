@@ -22,13 +22,13 @@ export default function LeftSidebar({
   const getCategoryTag = (cat) => {
     switch (cat) {
       case 'os_project':
-        return { label: 'OS REPO', text: 'text-emerald-700 dark:text-emerald-400' };
+        return { label: 'OS REPO', text: 'var(--accent)' };
       case 'ai_tool':
-        return { label: 'AI TOOL', text: 'text-purple-700 dark:text-purple-400' };
+        return { label: 'AI TOOL', text: '#9333EA' };
       case 'tech_news':
-        return { label: 'NEWS', text: 'text-sky-700 dark:text-sky-400' };
+        return { label: 'NEWS', text: '#0284C7' };
       default:
-        return { label: 'UPDATE', text: 'text-amber-700 dark:text-amber-400' };
+        return { label: 'UPDATE', text: '#D97706' };
     }
   };
 
@@ -48,17 +48,31 @@ export default function LeftSidebar({
   const grouped = groupUpdatesByDate(filtered);
 
   return (
-    <aside className="w-80 border-r border-[#E7E5E4] dark:border-[#242936] bg-[#FAF9F5] dark:bg-[#0A0C10] flex flex-col shrink-0 overflow-hidden select-none">
+    <aside 
+      className="w-80 border-r flex flex-col shrink-0 overflow-hidden select-none transition-colors duration-200"
+      style={{
+        backgroundColor: 'var(--bg-base)',
+        borderColor: 'var(--border)'
+      }}
+    >
       {/* Search & Filter Header */}
-      <div className="p-3 border-b border-[#E7E5E4] dark:border-[#242936] space-y-2">
+      <div 
+        className="p-3 border-b space-y-2"
+        style={{ borderColor: 'var(--border-subtle)' }}
+      >
         <div className="relative">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400 dark:text-slate-500" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-2.5" style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search feed items..."
-            className="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#12151E] border border-[#E7E5E4] dark:border-[#242936] rounded-md text-xs text-stone-900 dark:text-slate-100 placeholder-stone-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-600 transition-colors"
+            className="w-full pl-9 pr-3 py-1.5 rounded-md text-xs transition-colors focus:outline-none"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border)',
+              color: 'var(--text-primary)'
+            }}
           />
         </div>
 
@@ -66,24 +80,26 @@ export default function LeftSidebar({
           <div className="flex items-center space-x-1">
             <button
               onClick={() => setFilterRead('all')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
-                filterRead === 'all' 
-                  ? 'bg-stone-200 dark:bg-[#1E2330] text-stone-900 dark:text-white font-semibold' 
-                  : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200'
-              }`}
+              className="px-2 py-0.5 rounded text-[11px] font-medium transition-colors"
+              style={{
+                backgroundColor: filterRead === 'all' ? 'var(--bg-subtle)' : 'transparent',
+                color: filterRead === 'all' ? 'var(--text-primary)' : 'var(--text-secondary)',
+                fontWeight: filterRead === 'all' ? 600 : 500
+              }}
             >
               All ({updates.length})
             </button>
 
             <button
               onClick={() => setFilterRead('unread')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors flex items-center gap-1.5 ${
-                filterRead === 'unread' 
-                  ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-semibold' 
-                  : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200'
-              }`}
+              className="px-2 py-0.5 rounded text-[11px] font-medium transition-colors flex items-center gap-1.5"
+              style={{
+                backgroundColor: filterRead === 'unread' ? 'var(--accent-bg)' : 'transparent',
+                color: filterRead === 'unread' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                fontWeight: filterRead === 'unread' ? 600 : 500
+              }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></span>
               Unread ({updates.filter(u => u.read_status === 0).length})
             </button>
           </div>
@@ -91,7 +107,8 @@ export default function LeftSidebar({
           {selectedTag && (
             <button
               onClick={() => setSelectedTag(null)}
-              className="text-[10px] text-amber-700 dark:text-amber-400 hover:underline font-mono"
+              className="text-[10px] hover:underline font-mono"
+              style={{ color: 'var(--accent)' }}
             >
               Clear #{selectedTag}
             </button>
@@ -102,13 +119,16 @@ export default function LeftSidebar({
       {/* Borderless List Items */}
       <div className="flex-1 overflow-y-auto py-2 space-y-4">
         {Object.keys(grouped).length === 0 ? (
-          <div className="p-8 text-center text-stone-400 dark:text-slate-500 text-xs font-mono">
+          <div className="p-8 text-center text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
             No updates match criteria.
           </div>
         ) : (
           Object.entries(grouped).map(([groupTitle, items]) => (
             <div key={groupTitle} className="space-y-0.5">
-              <div className="px-4 py-1 text-[10px] font-bold font-mono text-stone-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
+              <div 
+                className="px-4 py-1 text-[10px] font-bold font-mono uppercase tracking-wider flex items-center justify-between"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 <span>{groupTitle}</span>
                 <span>{items.length}</span>
               </div>
@@ -123,37 +143,37 @@ export default function LeftSidebar({
                     <div
                       key={item.id}
                       onClick={() => onSelectUpdate(item)}
-                      className={`px-4 py-2.5 transition-all cursor-pointer relative border-l-2 ${
-                        isSelected
-                          ? 'border-emerald-600 dark:border-emerald-400 bg-white dark:bg-[#12151E] shadow-2xs'
-                          : 'border-transparent hover:bg-stone-200/50 dark:hover:bg-[#161A22]'
-                      }`}
+                      className="px-4 py-2.5 transition-all cursor-pointer relative border-l-2"
+                      style={{
+                        borderColor: isSelected ? 'var(--accent)' : 'transparent',
+                        backgroundColor: isSelected ? 'var(--bg-surface)' : 'transparent'
+                      }}
                     >
                       {isUnread && (
-                        <div className="absolute top-3.5 right-3 w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                        <div className="absolute top-3.5 right-3 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
                       )}
 
                       <div className="flex items-center space-x-2 mb-0.5">
-                        <span className={`text-[9px] font-bold font-mono ${tagInfo.text}`}>
+                        <span className="text-[9px] font-bold font-mono" style={{ color: tagInfo.text }}>
                           {tagInfo.label}
                         </span>
-                        <span className="text-[10px] font-mono text-stone-400 dark:text-slate-500">
+                        <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>
                           {formatTimeAgo(item.created_at)}
                         </span>
                       </div>
 
-                      <h4 className={`text-xs font-medium leading-snug line-clamp-2 ${
-                        isSelected 
-                          ? 'text-stone-900 dark:text-white font-semibold' 
-                          : isUnread 
-                          ? 'text-stone-800 dark:text-slate-100 font-semibold' 
-                          : 'text-stone-600 dark:text-slate-400'
-                      }`}>
+                      <h4 
+                        className="text-xs font-medium leading-snug line-clamp-2"
+                        style={{
+                          color: isSelected ? 'var(--text-primary)' : isUnread ? 'var(--text-primary)' : 'var(--text-secondary)',
+                          fontWeight: isSelected || isUnread ? 600 : 400
+                        }}
+                      >
                         {item.title}
                       </h4>
 
                       {item.metadata && item.metadata.star_growth && (
-                        <div className="mt-1 flex items-center space-x-1 text-[10px] font-mono text-emerald-700 dark:text-emerald-400">
+                        <div className="mt-1 flex items-center space-x-1 text-[10px] font-mono" style={{ color: 'var(--accent)' }}>
                           <Star className="w-2.5 h-2.5 fill-current" />
                           <span>{item.metadata.star_growth}</span>
                         </div>

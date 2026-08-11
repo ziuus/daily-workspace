@@ -18,21 +18,6 @@
     --accent-text: #047857;
   }
 
-  .dark {
-    --bg-base: #0B0D12;
-    --bg-surface: #121620;
-    --bg-subtle: #191E2B;
-    --bg-hover: #202636;
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-    --border: #232938;
-    --border-subtle: #191E2B;
-    --accent: #10B981;
-    --accent-bg: rgba(16, 185, 129, 0.12);
-    --accent-text: #34D399;
-  }
-
   body {
     background-color: var(--bg-base);
     color: var(--text-primary);
@@ -40,10 +25,18 @@
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 
-/* Background Aurora Ambient Layer */
+/* Background Depth Overlay */
+.workspace-bg {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Background Ambient Glow Layer */
 .aurora-bg {
   position: relative;
 }
@@ -56,11 +49,12 @@
   height: 140%;
   background: radial-gradient(
     ellipse 60% 40% at 50% 0%,
-    rgba(16, 185, 129, 0.07),
+    var(--accent-bg),
     transparent 70%
   );
   pointer-events: none;
   z-index: 0;
+  opacity: 0.8;
 }
 
 /* Noise Texture Overlay */
@@ -84,11 +78,12 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: var(--text-muted);
+  opacity: 0.3;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.45);
+  background: var(--text-secondary);
 }
 
 /* Status Pulse Animation */
@@ -98,6 +93,13 @@
 }
 .animate-status-pulse {
   animation: status-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Workspace Glass Header */
+.glass-header {
+  background-color: var(--bg-surface);
+  border-color: var(--border);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 /* Editorial Markdown Typography */
@@ -132,7 +134,7 @@
 .markdown-body h3 {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--accent-text);
+  color: var(--accent);
   margin-top: 1.35rem;
   margin-bottom: 0.5rem;
 }
