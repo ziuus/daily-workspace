@@ -11,8 +11,7 @@ import TaskLogsModal from './components/TaskLogsModal.jsx';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('daily_theme');
-    return saved === 'dark' ? 'dark' : 'light';
+    return localStorage.getItem('daily_theme') || 'light';
   });
 
   const [updates, setUpdates] = useState([]);
@@ -191,7 +190,8 @@ export default function App() {
   const unreadCount = updates.filter(u => u.read_status === 0).length;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[#FAF9F6] dark:bg-[#0A0B0E] text-slate-900 dark:text-slate-100 overflow-hidden font-sans antialiased">
+    <div className="h-screen w-screen flex flex-col bg-[#FAF9F6] dark:bg-[#0B0D12] text-stone-900 dark:text-slate-100 overflow-hidden font-sans antialiased aurora-bg">
+      <div className="noise-overlay" />
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -205,7 +205,7 @@ export default function App() {
         onToggleTheme={toggleTheme}
       />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden z-10">
         {activeTab === 'tasks' ? (
           <TaskManagementView
             tasks={tasks}
