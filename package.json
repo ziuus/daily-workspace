@@ -9,8 +9,7 @@
   "scripts": {
     "start": "node bin/daily.js serve",
     "build:web": "cd web && npx vite build",
-    "mcp": "node mcp/index.js",
-    "prepublishOnly": "cd web && npx vite build"
+    "mcp": "node mcp/index.js"
   },
   "repository": {
     "type": "git",
