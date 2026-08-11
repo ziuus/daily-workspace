@@ -1,0 +1,19 @@
+# Logs & DBs
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.log
+
+# Node & Dependencies
+node_modules/
+.npm/
+
+# Web App Build intermediate files
+web/node_modules/
+web/.vite/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

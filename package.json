@@ -1,0 +1,48 @@
+{
+  "name": "daily-workspace",
+  "version": "1.0.0",
+  "description": "Professional workspace, daily intelligence feed, and autonomous task management dashboard",
+  "main": "server/index.js",
+  "bin": {
+    "daily": "bin/daily.js"
+  },
+  "scripts": {
+    "start": "node bin/daily.js serve",
+    "build:web": "cd web && npx vite build",
+    "mcp": "node mcp/index.js",
+    "prepublishOnly": "cd web && npx vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziuus/daily-workspace.git"
+  },
+  "keywords": [
+    "workspace",
+    "mcp",
+    "mcp-server",
+    "intelligence-feed",
+    "cron-management",
+    "tasks",
+    "dashboard",
+    "cli",
+    "ai-agent",
+    "hermes"
+  ],
+  "author": "ziuus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ziuus/daily-workspace/issues"
+  },
+  "homepage": "https://github.com/ziuus/daily-workspace#readme",
+  "files": [
+    "bin",
+    "data/config.json",
+    "data/db.js",
+    "server",
+    "mcp",
+    "scripts",
+    "web/dist",
+    "README.md",
+    "LICENSE"
+  ]
+}
