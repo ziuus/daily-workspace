@@ -1,0 +1,465 @@
+export const THEMES = [
+  // LIGHT THEMES (11)
+  {
+    id: 'emerald-light',
+    name: 'Cream & Emerald',
+    category: 'Light',
+    preview: ['#FAF9F6', '#FFFFFF', '#059669'],
+    vars: {
+      '--bg-base': '#FAF9F6',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#F4F3EE',
+      '--bg-hover': '#ECEAE3',
+      '--text-primary': '#1C1917',
+      '--text-secondary': '#57534E',
+      '--text-muted': '#A8A29E',
+      '--border': '#E7E5E4',
+      '--border-subtle': '#F5F5F4',
+      '--accent': '#059669',
+      '--accent-bg': '#ECFDF5',
+      '--accent-text': '#047857',
+    }
+  },
+  {
+    id: 'blue-slate',
+    name: 'Vercel Blue Slate',
+    category: 'Light',
+    preview: ['#F8FAFC', '#FFFFFF', '#2563EB'],
+    vars: {
+      '--bg-base': '#F8FAFC',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#F1F5F9',
+      '--bg-hover': '#E2E8F0',
+      '--text-primary': '#0F172A',
+      '--text-secondary': '#475569',
+      '--text-muted': '#94A3B8',
+      '--border': '#E2E8F0',
+      '--border-subtle': '#F1F5F9',
+      '--accent': '#2563EB',
+      '--accent-bg': '#EFF6FF',
+      '--accent-text': '#1D4ED8',
+    }
+  },
+  {
+    id: 'warm-clay',
+    name: 'Warm Clay & Amber',
+    category: 'Light',
+    preview: ['#FDFBF7', '#FFFFFF', '#D97706'],
+    vars: {
+      '--bg-base': '#FDFBF7',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#F7F2E9',
+      '--bg-hover': '#EEE5D6',
+      '--text-primary': '#292524',
+      '--text-secondary': '#57534E',
+      '--text-muted': '#A8A29E',
+      '--border': '#E7E5E4',
+      '--border-subtle': '#F5F5F4',
+      '--accent': '#D97706',
+      '--accent-bg': '#FFFBEB',
+      '--accent-text': '#B45309',
+    }
+  },
+  {
+    id: 'pale-rose',
+    name: 'Rose Quartz',
+    category: 'Light',
+    preview: ['#FDF2F2', '#FFFFFF', '#E11D48'],
+    vars: {
+      '--bg-base': '#FDF2F2',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#FCE7E7',
+      '--bg-hover': '#F8D7D7',
+      '--text-primary': '#4C0519',
+      '--text-secondary': '#881337',
+      '--text-muted': '#9F1239',
+      '--border': '#FECDD3',
+      '--border-subtle': '#FFE4E6',
+      '--accent': '#E11D48',
+      '--accent-bg': '#FFF1F2',
+      '--accent-text': '#BE123C',
+    }
+  },
+  {
+    id: 'soft-mint',
+    name: 'Nordic Sage',
+    category: 'Light',
+    preview: ['#F4F9F4', '#FFFFFF', '#0D9488'],
+    vars: {
+      '--bg-base': '#F4F9F4',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#E6F4E6',
+      '--bg-hover': '#D4EBD4',
+      '--text-primary': '#064E3B',
+      '--text-secondary': '#047857',
+      '--text-muted': '#34D399',
+      '--border': '#A7F3D0',
+      '--border-subtle': '#D1FAE5',
+      '--accent': '#0D9488',
+      '--accent-bg': '#F0FDFA',
+      '--accent-text': '#0F766E',
+    }
+  },
+  {
+    id: 'lavender-dusk',
+    name: 'Lavender Haze',
+    category: 'Light',
+    preview: ['#F5F3FF', '#FFFFFF', '#7C3AED'],
+    vars: {
+      '--bg-base': '#F5F3FF',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#EDE9FE',
+      '--bg-hover': '#DDD6FE',
+      '--text-primary': '#4C1D95',
+      '--text-secondary': '#6D28D9',
+      '--text-muted': '#A78BFA',
+      '--border': '#DDD6FE',
+      '--border-subtle': '#EDE9FE',
+      '--accent': '#7C3AED',
+      '--accent-bg': '#F5F3FF',
+      '--accent-text': '#6D28D9',
+    }
+  },
+  {
+    id: 'sunset-gold',
+    name: 'Terracotta Gold',
+    category: 'Light',
+    preview: ['#FFFBEB', '#FFFFFF', '#CA8A04'],
+    vars: {
+      '--bg-base': '#FFFBEB',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#FEF3C7',
+      '--bg-hover': '#FDE68A',
+      '--text-primary': '#78350F',
+      '--text-secondary': '#92400E',
+      '--text-muted': '#F59E0B',
+      '--border': '#FDE68A',
+      '--border-subtle': '#FEF3C7',
+      '--accent': '#CA8A04',
+      '--accent-bg': '#FEF3C7',
+      '--accent-text': '#A16207',
+    }
+  },
+  {
+    id: 'cyber-light',
+    name: 'High Tech Cyan',
+    category: 'Light',
+    preview: ['#F0FDFA', '#FFFFFF', '#0891B2'],
+    vars: {
+      '--bg-base': '#F0FDFA',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#CCFBF1',
+      '--bg-hover': '#99F6E4',
+      '--text-primary': '#134E4A',
+      '--text-secondary': '#0F766E',
+      '--text-muted': '#2DD4BF',
+      '--border': '#99F6E4',
+      '--border-subtle': '#CCFBF1',
+      '--accent': '#0891B2',
+      '--accent-bg': '#ECFEFF',
+      '--accent-text': '#0E7490',
+    }
+  },
+  {
+    id: 'mono-clean',
+    name: 'Pure Monochrome',
+    category: 'Light',
+    preview: ['#FAFAFA', '#FFFFFF', '#09090B'],
+    vars: {
+      '--bg-base': '#FAFAFA',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#F4F4F5',
+      '--bg-hover': '#E4E4E7',
+      '--text-primary': '#09090B',
+      '--text-secondary': '#3F3F46',
+      '--text-muted': '#71717A',
+      '--border': '#E4E4E7',
+      '--border-subtle': '#F4F4F5',
+      '--accent': '#09090B',
+      '--accent-bg': '#F4F4F5',
+      '--accent-text': '#18181B',
+    }
+  },
+  {
+    id: 'desert-sand',
+    name: 'Sahara Dune',
+    category: 'Light',
+    preview: ['#F5EBE6', '#FFFFFF', '#9A3412'],
+    vars: {
+      '--bg-base': '#F5EBE6',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#EBDAD0',
+      '--bg-hover': '#DFC7BA',
+      '--text-primary': '#431407',
+      '--text-secondary': '#7C2D12',
+      '--text-muted': '#C2410C',
+      '--border': '#EBDAD0',
+      '--border-subtle': '#F5EBE6',
+      '--accent': '#9A3412',
+      '--accent-bg': '#FFEDD5',
+      '--accent-text': '#C2410C',
+    }
+  },
+  {
+    id: 'ocean-breeze',
+    name: 'Pacific Sky',
+    category: 'Light',
+    preview: ['#EFF6FF', '#FFFFFF', '#0284C7'],
+    vars: {
+      '--bg-base': '#EFF6FF',
+      '--bg-surface': '#FFFFFF',
+      '--bg-subtle': '#DBEAFE',
+      '--bg-hover': '#BFDBFE',
+      '--text-primary': '#1E3A8A',
+      '--text-secondary': '#1E40AF',
+      '--text-muted': '#60A5FA',
+      '--border': '#BFDBFE',
+      '--border-subtle': '#DBEAFE',
+      '--accent': '#0284C7',
+      '--accent-bg': '#E0F2FE',
+      '--accent-text': '#0369A1',
+    }
+  },
+
+  // DARK THEMES (11)
+  {
+    id: 'emerald-dark',
+    name: 'Emerald Studio Dark',
+    category: 'Dark',
+    preview: ['#0B0D12', '#121620', '#10B981'],
+    vars: {
+      '--bg-base': '#0B0D12',
+      '--bg-surface': '#121620',
+      '--bg-subtle': '#191E2B',
+      '--bg-hover': '#202636',
+      '--text-primary': '#F8FAFC',
+      '--text-secondary': '#94A3B8',
+      '--text-muted': '#64748B',
+      '--border': '#232938',
+      '--border-subtle': '#191E2B',
+      '--accent': '#10B981',
+      '--accent-bg': 'rgba(16, 185, 129, 0.15)',
+      '--accent-text': '#34D399',
+    }
+  },
+  {
+    id: 'cosmic-violet',
+    name: 'Cosmic Neon Purple',
+    category: 'Dark',
+    preview: ['#0A0512', '#140B24', '#C084FC'],
+    vars: {
+      '--bg-base': '#0A0512',
+      '--bg-surface': '#140B24',
+      '--bg-subtle': '#1F1238',
+      '--bg-hover': '#2A184C',
+      '--text-primary': '#FAF5FF',
+      '--text-secondary': '#E9D5FF',
+      '--text-muted': '#A855F7',
+      '--border': '#3B1F68',
+      '--border-subtle': '#2A184C',
+      '--accent': '#C084FC',
+      '--accent-bg': 'rgba(192, 132, 252, 0.15)',
+      '--accent-text': '#E9D5FF',
+    }
+  },
+  {
+    id: 'ocean-deep',
+    name: 'Midnight Abyss Cyan',
+    category: 'Dark',
+    preview: ['#030712', '#0F172A', '#38BDF8'],
+    vars: {
+      '--bg-base': '#030712',
+      '--bg-surface': '#0F172A',
+      '--bg-subtle': '#1E293B',
+      '--bg-hover': '#334155',
+      '--text-primary': '#F8FAFC',
+      '--text-secondary': '#CBD5E1',
+      '--text-muted': '#64748B',
+      '--border': '#1E293B',
+      '--border-subtle': '#0F172A',
+      '--accent': '#38BDF8',
+      '--accent-bg': 'rgba(56, 189, 248, 0.15)',
+      '--accent-text': '#7DD3FC',
+    }
+  },
+  {
+    id: 'amber-luxe',
+    name: 'Obsidian Amber Luxe',
+    category: 'Dark',
+    preview: ['#0A0A0A', '#1C1917', '#F59E0B'],
+    vars: {
+      '--bg-base': '#0A0A0A',
+      '--bg-surface': '#1C1917',
+      '--bg-subtle': '#292524',
+      '--bg-hover': '#3D3835',
+      '--text-primary': '#FAFAF9',
+      '--text-secondary': '#D6D3D1',
+      '--text-muted': '#78716C',
+      '--border': '#292524',
+      '--border-subtle': '#1C1917',
+      '--accent': '#F59E0B',
+      '--accent-bg': 'rgba(245, 158, 11, 0.15)',
+      '--accent-text': '#FBBF24',
+    }
+  },
+  {
+    id: 'rose-gold',
+    name: 'Velvet Crimson Rose',
+    category: 'Dark',
+    preview: ['#0D080A', '#1A1014', '#F43F5E'],
+    vars: {
+      '--bg-base': '#0D080A',
+      '--bg-surface': '#1A1014',
+      '--bg-subtle': '#26161D',
+      '--bg-hover': '#361D29',
+      '--text-primary': '#FFF1F2',
+      '--text-secondary': '#FECDD3',
+      '--text-muted': '#9F1239',
+      '--border': '#361D29',
+      '--border-subtle': '#26161D',
+      '--accent': '#F43F5E',
+      '--accent-bg': 'rgba(244, 63, 94, 0.15)',
+      '--accent-text': '#FB7185',
+    }
+  },
+  {
+    id: 'midnight-graphite',
+    name: 'Linear Indigo Graphite',
+    category: 'Dark',
+    preview: ['#111113', '#1C1C1E', '#6366F1'],
+    vars: {
+      '--bg-base': '#111113',
+      '--bg-surface': '#1C1C1E',
+      '--bg-subtle': '#2C2C2E',
+      '--bg-hover': '#3A3A3C',
+      '--text-primary': '#F2F2F7',
+      '--text-secondary': '#AEAEB2',
+      '--text-muted': '#636366',
+      '--border': '#2C2C2E',
+      '--border-subtle': '#1C1C1E',
+      '--accent': '#6366F1',
+      '--accent-bg': 'rgba(99, 102, 241, 0.15)',
+      '--accent-text': '#818CF8',
+    }
+  },
+  {
+    id: 'cyberpunk-neon',
+    name: 'Neo Tokyo Cyberpunk',
+    category: 'Dark',
+    preview: ['#090D16', '#101726', '#00F0FF'],
+    vars: {
+      '--bg-base': '#090D16',
+      '--bg-surface': '#101726',
+      '--bg-subtle': '#1A243A',
+      '--bg-hover': '#243250',
+      '--text-primary': '#E2F1FF',
+      '--text-secondary': '#8BB7E0',
+      '--text-muted': '#40658A',
+      '--border': '#1A243A',
+      '--border-subtle': '#101726',
+      '--accent': '#00F0FF',
+      '--accent-bg': 'rgba(0, 240, 255, 0.15)',
+      '--accent-text': '#70F8FF',
+    }
+  },
+  {
+    id: 'forest-night',
+    name: 'Pine Needle Forest',
+    category: 'Dark',
+    preview: ['#06120E', '#0E1F18', '#34D399'],
+    vars: {
+      '--bg-base': '#06120E',
+      '--bg-surface': '#0E1F18',
+      '--bg-subtle': '#162E24',
+      '--bg-hover': '#204234',
+      '--text-primary': '#ECFDF5',
+      '--text-secondary': '#A7F3D0',
+      '--text-muted': '#059669',
+      '--border': '#162E24',
+      '--border-subtle': '#0E1F18',
+      '--accent': '#34D399',
+      '--accent-bg': 'rgba(52, 211, 153, 0.15)',
+      '--accent-text': '#6EE7B7',
+    }
+  },
+  {
+    id: 'dracula',
+    name: 'Dracula Gothic Pink',
+    category: 'Dark',
+    preview: ['#0E0B16', '#1A162B', '#FF79C6'],
+    vars: {
+      '--bg-base': '#0E0B16',
+      '--bg-surface': '#1A162B',
+      '--bg-subtle': '#282342',
+      '--bg-hover': '#39335A',
+      '--text-primary': '#F8F8F2',
+      '--text-secondary': '#BD93F9',
+      '--text-muted': '#6272A4',
+      '--border': '#282342',
+      '--border-subtle': '#1A162B',
+      '--accent': '#FF79C6',
+      '--accent-bg': 'rgba(255, 121, 198, 0.15)',
+      '--accent-text': '#FF92D0',
+    }
+  },
+  {
+    id: 'monokai-dark',
+    name: 'Monokai Code Green',
+    category: 'Dark',
+    preview: ['#121212', '#1E1E1E', '#A6E22E'],
+    vars: {
+      '--bg-base': '#121212',
+      '--bg-surface': '#1E1E1E',
+      '--bg-subtle': '#2D2D2D',
+      '--bg-hover': '#3E3E3E',
+      '--text-primary': '#F8F8F2',
+      '--text-secondary': '#FD971F',
+      '--text-muted': '#75715E',
+      '--border': '#2D2D2D',
+      '--border-subtle': '#1E1E1E',
+      '--accent': '#A6E22E',
+      '--accent-bg': 'rgba(166, 226, 46, 0.15)',
+      '--accent-text': '#B6F23E',
+    }
+  },
+  {
+    id: 'synthwave-80s',
+    name: 'Retro 80s Synthwave',
+    category: 'Dark',
+    preview: ['#13091F', '#201133', '#F472B6'],
+    vars: {
+      '--bg-base': '#13091F',
+      '--bg-surface': '#201133',
+      '--bg-subtle': '#311A4D',
+      '--bg-hover': '#45256C',
+      '--text-primary': '#FDF2F8',
+      '--text-secondary': '#F472B6',
+      '--text-muted': '#A21CAF',
+      '--border': '#311A4D',
+      '--border-subtle': '#201133',
+      '--accent': '#F472B6',
+      '--accent-bg': 'rgba(244, 114, 182, 0.15)',
+      '--accent-text': '#F687B3',
+    }
+  }
+];
+
+export function applyTheme(themeId) {
+  const theme = THEMES.find(t => t.id === themeId) || THEMES[0];
+  const root = document.documentElement;
+
+  // Apply all custom properties to root
+  Object.entries(theme.vars).forEach(([key, val]) => {
+    root.style.setProperty(key, val);
+  });
+
+  // Toggle .dark class depending on theme category
+  if (theme.category === 'Dark') {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+
+  localStorage.setItem('daily_theme_id', theme.id);
+  return theme;
+}

@@ -8,11 +8,16 @@ import CommandPalette from './components/CommandPalette.jsx';
 import AddUpdateModal from './components/AddUpdateModal.jsx';
 import AddTaskModal from './components/AddTaskModal.jsx';
 import TaskLogsModal from './components/TaskLogsModal.jsx';
+import ThemeSelectorModal from './components/ThemeSelectorModal.jsx';
+import { THEMES, applyTheme } from './theme/themes.js';
 
 export default function App() {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('daily_theme') || 'light';
+  const [currentThemeId, setCurrentThemeId] = useState(() => {
+    return localStorage.getItem('daily_theme_id') || 'emerald-light';
   });
+
+  const currentTheme = THEMES.find(t => t.id === currentThemeId) || THEMES[0];
+  const themeMode = currentTheme.category === 'Dark' ? 'dark' : 'light';
 
   const [updates, setUpdates] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -28,20 +33,17 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAddUpdateOpen, setIsAddUpdateOpen] = useState(false);
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+  const [isThemeSelectorOpen, setIsThemeSelectorOpen] = useState(false);
   const [activeLogTask, setActiveLogTask] = useState(null);
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('daily_theme', theme);
-  }, [theme]);
+    applyTheme(currentThemeId);
+  }, [currentThemeId]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const toggleThemeMode = () => {
+    const nextThemeId = themeMode === 'dark' ? 'emerald-light' : 'emerald-dark';
+    setCurrentThemeId(nextThemeId);
+    applyTheme(nextThemeId);
   };
 
   useEffect(() => {
@@ -190,7 +192,7 @@ export default function App() {
   const unreadCount = updates.filter(u => u.read_status === 0).length;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[#FAF9F6] dark:bg-[#0B0D12] text-stone-900 dark:text-slate-100 overflow-hidden font-sans antialiased aurora-bg">
+    <div className="h-screen w-screen flex flex-col overflow-hidden font-sans antialiased aurora-bg">
       <div className="noise-overlay" />
       <Header
         activeTab={activeTab}
@@ -198,11 +200,12 @@ export default function App() {
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenAddUpdate={() => setIsAddUpdateOpen(true)}
         onOpenAddTask={() => setIsAddTaskOpen(true)}
+        onOpenThemeSelector={() => setIsThemeSelectorOpen(true)}
         onRefresh={fetchData}
         unreadCount={unreadCount}
         isRefreshing={isRefreshing}
-        theme={theme}
-        onToggleTheme={toggleTheme}
+        theme={themeMode}
+        onToggleTheme={toggleThemeMode}
       />
 
       <div className="flex-1 flex overflow-hidden z-10">
@@ -273,6 +276,15 @@ export default function App() {
         isOpen={!!activeLogTask}
         onClose={() => setActiveLogTask(null)}
         task={activeLogTask}
+      />
+
+      <ThemeSelectorModal
+        isOpen={isThemeSelectorOpen}
+        onClose={() => setIsThemeSelectorOpen(false)}
+        currentThemeId={currentThemeId}
+        onThemeSelect={(newThemeId) => {
+          setCurrentThemeId(newThemeId);
+        }}
       />
     </div>
   );

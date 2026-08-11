@@ -11,7 +11,8 @@ import {
   ListTodo,
   Sun,
   Moon,
-  Bot
+  Bot,
+  Palette
 } from 'lucide-react';
 
 export default function Header({ 
@@ -20,6 +21,7 @@ export default function Header({
   onOpenSearch, 
   onOpenAddUpdate, 
   onOpenAddTask, 
+  onOpenThemeSelector,
   onRefresh,
   unreadCount,
   isRefreshing,
@@ -97,10 +99,20 @@ export default function Header({
           <span>MCP Stdio</span>
         </div>
 
-        {/* Theme Switcher Button */}
+        {/* Theme Palette Modal Button */}
+        <button
+          onClick={onOpenThemeSelector}
+          title="Open Theme Palette Studio (22 Themes)"
+          className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs font-mono"
+        >
+          <Palette className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <span className="hidden sm:inline">Themes</span>
+        </button>
+
+        {/* Theme Switcher Fast Toggle Button */}
         <button
           onClick={onToggleTheme}
-          title={theme === 'dark' ? 'Switch to Warm Light Theme' : 'Switch to Minimal Dark Theme'}
+          title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
           className="p-1.5 rounded-lg bg-stone-200/60 dark:bg-[#191E2B] border border-stone-200/80 dark:border-white/5 text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white transition-colors"
         >
           {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-stone-600" />}
