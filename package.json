@@ -1,5 +1,5 @@
 {
-  "name": "daily-workspace",
+  "name": "@ziuus/daily",
   "version": "1.0.0",
   "description": "Professional workspace, daily intelligence feed, and autonomous task management dashboard",
   "main": "server/index.js",
@@ -16,6 +16,7 @@
     "url": "git+https://github.com/ziuus/daily-workspace.git"
   },
   "keywords": [
+    "daily",
     "workspace",
     "mcp",
     "mcp-server",

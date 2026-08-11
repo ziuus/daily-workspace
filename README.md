@@ -2,7 +2,7 @@
 
 > A high-density, developer-first workspace, daily intelligence feed, and autonomous cron management dashboard built for developers and AI agents.
 
-[![npm version](https://img.shields.io/npm/v/daily-workspace.svg?color=emerald)](https://www.npmjs.com/package/daily-workspace)
+[![npm version](https://img.shields.io/npm/v/@ziuus/daily.svg?color=emerald)](https://www.npmjs.com/package/@ziuus/daily)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-Stdio%20Server-purple.svg)](mcp/index.js)
 
@@ -18,28 +18,6 @@
 
 ---
 
-## 🏗️ System Architecture
-
-All runtime database state and logs live isolated inside `~/.daily/`:
-
-```
-~/.daily/
-├── data/
-│   ├── daily.db               # SQLite database (updates, categories, task states, logs)
-│   └── config.json            # Configuration settings
-├── mcp/
-│   └── index.js               # Stdio MCP Server for agent integration
-├── server/
-│   ├── index.js               # REST API & static web dashboard server
-│   └── scheduler.js           # Autonomous background task scheduler
-├── web/                       # High-density Web UI (React + Tailwind CSS)
-│   └── dist/                  # Compiled production static assets
-└── bin/
-    └── daily.js               # Global CLI entrypoint
-```
-
----
-
 ## 🚀 Quick Start
 
 ### Installation
@@ -47,13 +25,13 @@ All runtime database state and logs live isolated inside `~/.daily/`:
 Install globally via npm:
 
 ```bash
-npm install -g daily-workspace
+npm install -g @ziuus/daily
 ```
 
 Or run directly with npx:
 
 ```bash
-npx daily-workspace
+npx @ziuus/daily
 ```
 
 ---
