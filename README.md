@@ -1,9 +1,9 @@
 <div align="center">
 
 # ⚡ Daily
-### Autonomous Workspace, Daily Intelligence Feed, Theme Studio & Task Management Dashboard
+### The Central Local Workspace Hub Connecting All Your AI Agents & Automation
 
-*A developer-first, high-density workspace and local background automation hub built for software engineers and AI agents.*
+*A developer-first, high-density workspace that acts as the single central bridge linking all your AI agents (OpenCode, Hermes, Claude, Cursor, Antigravity, Windsurf) into one unified intelligence feed, theme studio, and task hub.*
 
 [![npm version](https://img.shields.io/npm/v/@ziuus/daily.svg?color=10B981&style=for-the-badge)](https://www.npmjs.com/package/@ziuus/daily)
 [![License: MIT](https://img.shields.io/badge/License-MIT-38BDF8.svg?style=for-the-badge)](LICENSE)
@@ -40,11 +40,12 @@
 
 ## 🌟 Key Features
 
+* **🔗 Multi-Agent Central Bridge**: Serves as the shared memory and central feed connecting OpenCode, Hermes, Antigravity, Cursor, Claude Desktop, Windsurf, and custom AI scripts into one dashboard.
 * **📰 Curated Intelligence Feed**: Track shortlisted viral open-source repositories (velocity, star growth, repo links), trending AI tools & LLM releases, and high-signal tech news.
 * **🎨 22-Theme Studio & Dynamic Workspace Engine**: 22 hand-curated color presets (11 Light / 11 Dark) that transform 100% of the workspace interface (headers, sidebars, badges, buttons, dots, and surfaces).
 * **☀️/🌙 Paired Light & Dark Mode Toggling**: The Sun/Moon header button smoothly toggles between paired Light and Dark versions of your active theme family (e.g. *Rose Quartz* ↔ *Velvet Crimson Rose*).
 * **🤖 Autonomous Task & Cron Hub**: Manage background scripts (Python scripts, scrapers, system health watchdogs). Monitor status (`active`, `paused`, `running`, `error`), last/next run times, and live terminal logs.
-* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents (OpenCode, Hermes, Claude Desktop, Cursor, Antigravity/Gemini, Windsurf, Roo Code, Goose, Continue, Zed, Python/Node SDKs) to push markdown updates, read feed entries, and trigger tasks on demand.
+* **🔌 Built-in MCP Server (`daily-mcp`)**: Native Stdio Model Context Protocol integration enabling AI agents to push markdown updates, read feed entries, and trigger tasks on demand.
 * **✍️ Rich GFM Markdown Renderer**: Built-in renderer with code syntax highlighting, copy-to-clipboard buttons, formatted tables, task checklists, and GFM callout blocks (`[!NOTE]`, `[!TIP]`, `[!WARNING]`).
 * **📦 Zero-Dependency SQLite Storage**: Powered by Node.js native `node:sqlite` for high-performance WAL-mode storage in `~/.daily/data/daily.db`.
 
