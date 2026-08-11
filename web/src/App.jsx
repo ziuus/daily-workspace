@@ -10,6 +10,10 @@ import AddTaskModal from './components/AddTaskModal.jsx';
 import TaskLogsModal from './components/TaskLogsModal.jsx';
 
 export default function App() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('daily_theme') || 'dark';
+  });
+
   const [updates, setUpdates] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [stats, setStats] = useState(null);
@@ -27,13 +31,26 @@ export default function App() {
   const [activeLogTask, setActiveLogTask] = useState(null);
 
   useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('daily_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  useEffect(() => {
     fetchData();
   }, [activeTab]);
 
   const fetchData = async () => {
     setIsRefreshing(true);
     try {
-      // Fetch Updates
       const categoryParam = (activeTab !== 'all' && activeTab !== 'tasks') ? `?category=${activeTab}` : '';
       const resUpdates = await fetch(`/api/updates${categoryParam}`);
       const dataUpdates = await resUpdates.json();
@@ -45,14 +62,12 @@ export default function App() {
         }
       }
 
-      // Fetch Tasks
       const resTasks = await fetch('/api/tasks');
       const dataTasks = await resTasks.json();
       if (Array.isArray(dataTasks)) {
         setTasks(dataTasks);
       }
 
-      // Fetch Stats
       const resStats = await fetch('/api/stats');
       const dataStats = await resStats.json();
       setStats(dataStats);
@@ -112,11 +127,9 @@ export default function App() {
   };
 
   const handleTriggerTask = async (taskId) => {
-    // Set local task state to running
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status: 'running' } : t));
     try {
-      const res = await fetch(`/api/tasks/${taskId}/trigger`, { method: 'POST' });
-      const result = await res.json();
+      await fetch(`/api/tasks/${taskId}/trigger`, { method: 'POST' });
       fetchData();
     } catch (e) {
       console.error(e);
@@ -164,10 +177,6 @@ export default function App() {
     }
   };
 
-  const handleRunWatchdog = async () => {
-    handleTriggerTask('system-watchdog');
-  };
-
   const fetchStatsOnly = async () => {
     try {
       const resStats = await fetch('/api/stats');
@@ -181,24 +190,22 @@ export default function App() {
   const unreadCount = updates.filter(u => u.read_status === 0).length;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[#090D16] text-slate-100 overflow-hidden font-sans antialiased">
-      {/* Top Header */}
+    <div className="h-screen w-screen flex flex-col bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 overflow-hidden font-sans antialiased">
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenAddUpdate={() => setIsAddUpdateOpen(true)}
         onOpenAddTask={() => setIsAddTaskOpen(true)}
-        onRunWatchdog={handleRunWatchdog}
         onRefresh={fetchData}
         unreadCount={unreadCount}
         isRefreshing={isRefreshing}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
-      {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {activeTab === 'tasks' ? (
-          /* Autonomous Tasks Full Management Tab */
           <TaskManagementView
             tasks={tasks}
             onTriggerTask={handleTriggerTask}
@@ -208,7 +215,6 @@ export default function App() {
             onOpenAddTask={() => setIsAddTaskOpen(true)}
           />
         ) : (
-          /* Feed & Intelligence Canvas (3-Pane View) */
           <>
             <LeftSidebar
               updates={updates}
@@ -238,7 +244,6 @@ export default function App() {
         )}
       </div>
 
-      {/* Modals & Overlays */}
       <CommandPalette
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
