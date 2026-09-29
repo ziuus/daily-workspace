@@ -21,6 +21,7 @@ export default function LeftSidebar({
   setFilterRead,
   searchTerm,
   setSearchTerm,
+  onItemClickMobile,
   // Navigation props
   currentOffset,
   totalItems,
@@ -158,7 +159,10 @@ export default function LeftSidebar({
                   return (
                     <div
                       key={item.id}
-                      onClick={() => onSelectUpdate(item)}
+                      onClick={() => {
+                        onSelectUpdate(item);
+                        if (onItemClickMobile) onItemClickMobile();
+                      }}
                       className={`p-2.5 rounded-xl border transition-all cursor-pointer relative group ${
                         isSelected
                           ? 'bg-slate-800/90 border-emerald-500/40 shadow-md shadow-emerald-500/5'

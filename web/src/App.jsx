@@ -32,6 +32,9 @@ export default function App() {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [activeLogTask, setActiveLogTask] = useState(null);
 
+  // Mobile state
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, [activeTab, currentOffset]);
@@ -230,6 +233,110 @@ export default function App() {
 
   const unreadCount = updates.filter(u => u.read_status === 0).length;
 
+  // Mobile handlers
+  const handleMobileItemClick = () => {
+    if (window.innerWidth < 1024) {
+      setIsMobileSidebarOpen(false);
+    }
+  };
+
+  const handleMobileMenuOpen = () => {
+    setIsMobileSidebarOpen(true);
+  };
+
+  const handleMobileMenuClose = () => {
+    setIsMobileSidebarOpen(false);
+  };
+
+  // Render mobile sidebar overlay
+  const renderMobileSidebar = () => {
+    if (!isMobileSidebarOpen) return null;
+
+    return (
+      <div
+        className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-sm md:hidden"
+        onClick={handleMobileMenuClose}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Feed sidebar"
+      >
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80">
+            <h3 className="font-bold font-mono text-white text-sm">Feed</h3>
+            <button
+              onClick={handleMobileMenuClose}
+              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5"
+              aria-label="Close sidebar"
+            >
+              <span className="text-xl leading-none">×</span>
+            </button>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <LeftSidebar
+              updates={updates}
+              selectedUpdate={selectedUpdate}
+              onSelectUpdate={setSelectedUpdate}
+              filterRead={filterRead}
+              setFilterRead={setFilterRead}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onItemClickMobile={handleMobileItemClick}
+              // Navigation props
+              currentOffset={currentOffset}
+              totalItems={totalItems}
+              pageSize={PAGE_SIZE}
+              isLoading={isLoading}
+              onNavigate={handleNavigate}
+              onGoToday={handleGoToday}
+              isAtLatest={isAtLatest}
+              isAtOldest={isAtOldest}
+              currentViewDate={viewDateRange.oldest}
+              currentViewNewestDate={viewDateRange.newest}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Render mobile reading canvas overlay
+  const renderMobileReadingCanvas = () => {
+    if (!selectedUpdate || window.innerWidth >= 1024) return null;
+
+    return (
+      <div
+        className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-sm md:hidden"
+        onClick={() => setSelectedUpdate(null)}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Reading update"
+      >
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80">
+            <h3 className="font-bold font-mono text-white text-sm truncate max-w-[200px]">
+              {selectedUpdate.title}
+            </h3>
+            <button
+              onClick={() => setSelectedUpdate(null)}
+              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 shrink-0"
+              aria-label="Close reading view"
+            >
+              <span className="text-xl leading-none">×</span>
+            </button>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <ReadingCanvas
+              update={selectedUpdate}
+              onToggleRead={handleToggleRead}
+              onDeleteUpdate={handleDeleteUpdate}
+              onBackToFeed={() => setSelectedUpdate(null)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[#090D16] text-slate-100 overflow-hidden font-sans antialiased">
       {/* Top Header */}
@@ -243,60 +350,75 @@ export default function App() {
         onRefresh={fetchData}
         unreadCount={unreadCount}
         isRefreshing={isLoading}
+        onOpenMobileMenu={handleMobileMenuOpen}
+        isMobileMenuOpen={isMobileSidebarOpen}
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {activeTab === 'tasks' ? (
-          /* Autonomous Tasks Full Management Tab */
-          <TaskManagementView
-            tasks={tasks}
-            onTriggerTask={handleTriggerTask}
-            onToggleTaskPause={handleToggleTaskPause}
-            onDeleteTask={handleDeleteTask}
-            onViewLogs={(t) => setActiveLogTask(t)}
-            onOpenAddTask={() => setIsAddTaskOpen(true)}
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Left Sidebar - Feed (hidden on mobile, shown via overlay) */}
+        <aside className="hidden lg:block w-80 border-r border-white/10 bg-[#0A0E1A] flex flex-col shrink-0 overflow-hidden select-none">
+          <LeftSidebar
+            updates={updates}
+            selectedUpdate={selectedUpdate}
+            onSelectUpdate={setSelectedUpdate}
+            filterRead={filterRead}
+            setFilterRead={setFilterRead}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onItemClickMobile={handleMobileItemClick}
+            // Navigation props
+            currentOffset={currentOffset}
+            totalItems={totalItems}
+            pageSize={PAGE_SIZE}
+            isLoading={isLoading}
+            onNavigate={handleNavigate}
+            onGoToday={handleGoToday}
+            isAtLatest={isAtLatest}
+            isAtOldest={isAtOldest}
+            currentViewDate={viewDateRange.oldest}
+            currentViewNewestDate={viewDateRange.newest}
           />
-        ) : (
-          /* Feed & Intelligence Canvas (3-Pane View) */
-          <>
-            <LeftSidebar
-              updates={updates}
-              selectedUpdate={selectedUpdate}
-              onSelectUpdate={setSelectedUpdate}
-              filterRead={filterRead}
-              setFilterRead={setFilterRead}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              // Date navigator props
-              currentOffset={currentOffset}
-              totalItems={totalItems}
-              pageSize={PAGE_SIZE}
-              isLoading={isLoading}
-              onNavigate={handleNavigate}
-              onGoToday={handleGoToday}
-              isAtLatest={isAtLatest}
-              isAtOldest={isAtOldest}
-              currentViewDate={viewDateRange.oldest}
-              currentViewNewestDate={viewDateRange.newest}
-            />
+        </aside>
 
+        {/* Center - Reading Canvas */}
+        <main className="flex-1 min-w-0 relative">
+          {activeTab === 'tasks' ? (
+            /* Autonomous Tasks Full Management Tab */
+            <TaskManagementView
+              tasks={tasks}
+              onTriggerTask={handleTriggerTask}
+              onToggleTaskPause={handleToggleTaskPause}
+              onDeleteTask={handleDeleteTask}
+              onViewLogs={(t) => setActiveLogTask(t)}
+              onOpenAddTask={() => setIsAddTaskOpen(true)}
+            />
+          ) : (
+            /* Feed & Intelligence Canvas */
             <ReadingCanvas
               update={selectedUpdate}
               onToggleRead={handleToggleRead}
               onDeleteUpdate={handleDeleteUpdate}
+              onBackToFeed={() => setSelectedUpdate(null)}
             />
+          )}
+        </main>
 
-            <RightSidebar
-              stats={stats}
-              tasks={tasks}
-              onTriggerTask={handleTriggerTask}
-              onToggleTaskPause={handleToggleTaskPause}
-              onViewLogs={(t) => setActiveLogTask(t)}
-              onOpenAddTask={() => setIsAddTaskOpen(true)}
-            />
-          </>
-        )}
+        {/* Right Sidebar - Stats & Tasks (hidden on mobile, shown on lg+) */}
+        <aside className="hidden xl:block w-80 border-l border-white/10 bg-[#0A0E1A] flex flex-col shrink-0 overflow-hidden select-none">
+          <RightSidebar
+            stats={stats}
+            tasks={tasks}
+            onTriggerTask={handleTriggerTask}
+            onToggleTaskPause={handleToggleTaskPause}
+            onViewLogs={(t) => setActiveLogTask(t)}
+            onOpenAddTask={() => setIsAddTaskOpen(true)}
+          />
+        </aside>
+
+        {/* Mobile Overlays */}
+        {renderMobileSidebar()}
+        {renderMobileReadingCanvas()}
       </div>
 
       {/* Modals & Overlays */}

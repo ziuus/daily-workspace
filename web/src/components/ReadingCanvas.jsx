@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import MarkdownRenderer from './MarkdownRenderer.jsx';
 import { 
   Flame, 
-  Cpu, 
-  Newspaper, 
   Sparkles, 
   ExternalLink, 
   Check, 
@@ -12,22 +10,32 @@ import {
   CheckCircle2, 
   Circle, 
   Star, 
-  GitFork, 
   Bot, 
   Calendar, 
-  Code2
+  Code2,
+  ChevronLeft
 } from 'lucide-react';
 
 export default function ReadingCanvas({ 
   update, 
   onToggleRead, 
-  onDeleteUpdate 
+  onDeleteUpdate,
+  onBackToFeed
 }) {
   const [copied, setCopied] = useState(false);
 
   if (!update) {
     return (
-      <main className="flex-1 bg-[#090D16] flex flex-col items-center justify-center text-center p-8 select-none">
+      <main className="flex-1 bg-[#090D16] flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none">
+        {onBackToFeed && (
+          <button
+            onClick={onBackToFeed}
+            className="md:hidden self-start mb-6 flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-slate-300 hover:text-white text-xs font-mono"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Back to Feed</span>
+          </button>
+        )}
         <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 shadow-lg shadow-emerald-500/10">
           <Sparkles className="w-8 h-8" />
         </div>
@@ -49,8 +57,24 @@ export default function ReadingCanvas({
 
   return (
     <main className="flex-1 bg-[#090D16] flex flex-col overflow-hidden">
+      {/* Mobile Back Header Bar */}
+      {onBackToFeed && (
+        <div className="md:hidden px-4 py-2 bg-slate-950 border-b border-white/10 flex items-center justify-between">
+          <button
+            onClick={onBackToFeed}
+            className="flex items-center space-x-1.5 text-xs font-mono text-emerald-400 font-semibold active:opacity-75"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Back to Feed List</span>
+          </button>
+          <span className="text-[10px] font-mono text-slate-500">
+            Reading Mode
+          </span>
+        </div>
+      )}
+
       {/* Article Header Controls */}
-      <header className="px-8 py-5 border-b border-white/10 bg-[#0C121E]/60 backdrop-blur-md flex items-start justify-between gap-4 shrink-0">
+      <header className="px-4 py-4 sm:px-8 sm:py-5 border-b border-white/10 bg-[#0C121E]/60 backdrop-blur-md flex flex-col sm:flex-row sm:items-start justify-between gap-3 shrink-0">
         <div className="space-y-2 flex-1 min-w-0">
           {/* Category & Tags */}
           <div className="flex items-center space-x-2 flex-wrap gap-y-1">
@@ -70,13 +94,13 @@ export default function ReadingCanvas({
           </div>
 
           {/* Title */}
-          <h1 className="text-xl lg:text-2xl font-bold text-white leading-snug tracking-tight">
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white leading-snug tracking-tight">
             {update.title}
           </h1>
 
           {/* Tags */}
           {update.tags && update.tags.length > 0 && (
-            <div className="flex items-center space-x-1.5 pt-1">
+            <div className="flex items-center space-x-1.5 pt-1 flex-wrap gap-y-1">
               {update.tags.map(tag => (
                 <span key={tag} className="text-xs font-mono text-emerald-400/90 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
                   #{tag}
@@ -87,7 +111,7 @@ export default function ReadingCanvas({
         </div>
 
         {/* Header Actions */}
-        <div className="flex items-center space-x-2 shrink-0 pt-1">
+        <div className="flex items-center space-x-2 shrink-0 self-end sm:self-start pt-1">
           <button
             onClick={() => onToggleRead(update.id, isRead ? 0 : 1)}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
@@ -119,19 +143,19 @@ export default function ReadingCanvas({
       </header>
 
       {/* Content Scroll Container */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-8 sm:py-6 space-y-6">
         {/* Open Source Repo Highlight Card (if category is os_project) */}
         {update.category === 'os_project' && update.metadata && update.metadata.repo_url && (
           <div className="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 shadow-lg shadow-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0">
               <div className="flex items-center space-x-2 text-xs font-mono text-emerald-400">
-                <Flame className="w-4 h-4 fill-emerald-400" />
+                <Flame className="w-4 h-4 fill-emerald-400 shrink-0" />
                 <span className="font-bold uppercase tracking-wider">Exploding Open-Source Repository</span>
               </div>
-              <p className="text-sm font-semibold text-white font-mono">
+              <p className="text-sm font-semibold text-white font-mono truncate">
                 {update.metadata.repo_url}
               </p>
-              <div className="flex items-center space-x-4 text-xs font-mono text-slate-400 pt-1">
+              <div className="flex items-center space-x-4 text-xs font-mono text-slate-400 pt-1 flex-wrap gap-y-1">
                 {update.metadata.star_growth && (
                   <span className="text-emerald-300 font-bold flex items-center gap-1">
                     <Star className="w-3 h-3 fill-emerald-300 text-emerald-300" />
