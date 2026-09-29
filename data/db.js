@@ -355,7 +355,7 @@ Node.js 22 LTS introduces major standard library improvements that eliminate ext
 
 // Data Access API Functions
 
-function getUpdates({ since, category, search, limit = 50, tag, read_status } = {}) {
+function getUpdates({ since, category, search, limit = 50, offset = 0, tag, read_status } = {}) {
   const db = getDb();
   let sql = 'SELECT * FROM updates WHERE 1=1';
   const params = [];
@@ -379,11 +379,11 @@ function getUpdates({ since, category, search, limit = 50, tag, read_status } = 
   }
   if (tag) {
     sql += ' AND tags LIKE ?';
-    params.push(`%"${tag}"%`);
+    params.push(`"%${tag}"%`);
   }
 
-  sql += ' ORDER BY created_at DESC LIMIT ?';
-  params.push(Number(limit));
+  sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+  params.push(Number(limit), Number(offset));
 
   const stmt = db.prepare(sql);
   const rows = stmt.all(...params);

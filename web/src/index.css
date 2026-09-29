@@ -1,200 +1,97 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @layer base {
-  :root {
-    --bg-base: #FAF9F6;
-    --bg-surface: #FFFFFF;
-    --bg-subtle: #F4F3EE;
-    --bg-hover: #ECEAE3;
-    --text-primary: #1C1917;
-    --text-secondary: #57534E;
-    --text-muted: #A8A29E;
-    --border: #E7E5E4;
-    --border-subtle: #F5F5F4;
-    --accent: #059669;
-    --accent-bg: #ECFDF5;
-    --accent-text: #047857;
-  }
-
   body {
-    background-color: var(--bg-base);
-    color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #090D16;
+    color: #E2E8F0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 
-/* Background Depth Overlay */
-.workspace-bg {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-/* Background Ambient Glow Layer */
-.aurora-bg {
-  position: relative;
-}
-.aurora-bg::before {
-  content: '';
-  position: absolute;
-  top: -40%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(
-    ellipse 60% 40% at 50% 0%,
-    var(--accent-bg),
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.8;
-}
-
-/* Noise Texture Overlay */
-.noise-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-}
-
-/* Custom Soft Scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(15, 23, 42, 0.6);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  opacity: 0.3;
-  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Status Pulse Animation */
+/* Glassmorphism Panel Utility */
+.glass-panel {
+  background: rgba(16, 22, 34, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Pulse animation for live status */
 @keyframes status-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(1.3); }
+  50% { opacity: 0.4; transform: scale(1.15); }
 }
 .animate-status-pulse {
-  animation: status-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Workspace Glass Header */
-.glass-header {
-  background-color: var(--bg-surface);
-  border-color: var(--border);
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-/* Editorial Markdown Typography */
-.markdown-body {
-  font-size: 15px;
-  line-height: 1.8;
-  color: var(--text-secondary);
-}
-
+/* Markdown Typography Polish */
 .markdown-body h1 {
-  font-size: 1.85rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  margin-top: 2rem;
+  color: #ffffff;
   margin-bottom: 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+  margin-top: 1rem;
 }
-
 .markdown-body h2 {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  margin-top: 1.75rem;
+  color: #ffffff;
   margin-bottom: 0.75rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 1px solid var(--border-subtle);
+  margin-top: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.25rem;
 }
-
 .markdown-body h3 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--accent);
-  margin-top: 1.35rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #34D399;
   margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }
-
+.markdown-body h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #E2E8F0;
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+}
 .markdown-body p {
-  margin-bottom: 1.25rem;
-  color: var(--text-secondary);
+  color: #CBD5E1;
+  line-height: 1.625;
+  margin-bottom: 1rem;
+  font-size: 14.5px;
 }
-
 .markdown-body ul {
   list-style-type: disc;
-  padding-left: 1.35rem;
-  margin-bottom: 1.25rem;
+  list-style-position: inside;
+  color: #CBD5E1;
+  margin-bottom: 1rem;
+  font-size: 14px;
 }
-
 .markdown-body ol {
   list-style-type: decimal;
-  padding-left: 1.35rem;
-  margin-bottom: 1.25rem;
-}
-
-.markdown-body li {
-  margin-bottom: 0.4rem;
-  color: var(--text-secondary);
-}
-
-.markdown-body strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.markdown-body code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.875em;
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  background-color: var(--bg-subtle);
-  color: var(--text-primary);
-}
-
-.markdown-body pre {
-  padding: 1.25rem;
-  border-radius: 10px;
-  background-color: var(--bg-subtle);
-  border: 1px solid var(--border);
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-}
-
-.markdown-body pre code {
-  padding: 0;
-  background-color: transparent;
-  border-radius: 0;
-}
-
-.markdown-body blockquote {
-  border-left: 3px solid var(--accent);
-  padding-left: 1rem;
-  margin-left: 0;
-  margin-bottom: 1.25rem;
-  color: var(--text-secondary);
-  font-style: italic;
+  list-style-position: inside;
+  color: #CBD5E1;
+  margin-bottom: 1rem;
+  font-size: 14px;
 }

@@ -67,6 +67,7 @@ async function handleApiRequest(req, res, pathname, query) {
       category: query.category,
       search: query.search,
       limit: query.limit ? parseInt(query.limit, 10) : 50,
+      offset: query.offset ? parseInt(query.offset, 10) : 0,
       tag: query.tag,
       read_status: query.read_status !== undefined ? parseInt(query.read_status, 10) : undefined
     });

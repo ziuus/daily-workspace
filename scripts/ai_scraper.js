@@ -97,7 +97,7 @@ async function main() {
     for (const r of repos) {
       if (existingUrls.has(r.repo_url.toLowerCase())) continue;
       if (existingTitles.has(r.name.toLowerCase())) continue;
-      const markdown = `### ${r.owner}/${r.name}\n\n${r.description || 'Trending today on GitHub.'}\n\n| Metric | Value |\n| :--- | :--- |\n| **Stars today** | ${r.stars_today ? `${r.stars_today}+` : 'trending'} |\n| **Repo** | ${r.repo_url} |\n\n> [!NOTE]\n> From **GitHub Trending** (daily).\n\n**Why it matters**: daily-trending velocity is the first signal of a repo about to blow up.`;
+      const markdown = `### [${r.owner}/${r.name}](https://github.com/${r.owner}/${r.name})\n\n${r.description || 'Trending today on GitHub.'}\n\n| Metric | Value |\n| :--- | :--- |\n| **Stars today** | ${r.stars_today ? `${r.stars_today}+` : 'trending'} |\n| **Repo** | [${r.repo_url}](${r.repo_url}) |\n\n> [!NOTE]\n> From **GitHub Trending** (daily).\n\n**Why it matters**: daily-trending velocity is the first signal of a repo about to blow up.`;
       db.addUpdate({
         title: `${r.owner}/${r.name}: Trending on GitHub Today`,
         category: 'os_project',

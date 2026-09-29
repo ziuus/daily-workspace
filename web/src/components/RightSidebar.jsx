@@ -4,154 +4,92 @@ import {
   Terminal, 
   Play, 
   Pause, 
+  RefreshCw, 
   FileText, 
+  Flame, 
+  Cpu, 
+  CheckCircle2, 
+  Clock, 
   Plus,
-  Server,
-  Bot
+  Server
 } from 'lucide-react';
 
 export default function RightSidebar({ 
   stats, 
-  tasks = [], 
-  updates = [],
+  tasks, 
   onTriggerTask, 
   onToggleTaskPause, 
-  onOpenLogs, 
-  onOpenAddTask,
-  onOpenTaskView
+  onViewLogs,
+  onOpenAddTask
 }) {
-  // Derived metrics fallback if stats is null or initializing
-  const osRepoCount = stats?.updates?.categories?.os_project ?? updates.filter(u => u.category === 'os_project').length;
-  const activeTaskCount = stats?.tasks?.active ?? tasks.filter(t => t.status === 'active').length;
-  const totalTaskCount = stats?.tasks?.total ?? tasks.length;
-  const unreadCount = stats?.updates?.unread ?? updates.filter(u => u.read_status === 0).length;
-
   return (
-    <div 
-      className="w-80 border-l flex flex-col h-full shrink-0 transition-colors"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderColor: 'var(--border)'
-      }}
-    >
-      {/* Sidebar Header */}
-      <div 
-        className="p-4 border-b flex items-center justify-between"
-        style={{ borderColor: 'var(--border)' }}
-      >
-        <div className="flex items-center space-x-2">
-          <Activity className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-          <h2 className="text-xs font-bold font-mono uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
-            Workspace Metrics
-          </h2>
-        </div>
-
-        <div className="flex items-center space-x-1">
-          <button
-            onClick={onOpenTaskView}
-            title="Open Task Hub View"
-            className="p-1 rounded transition-colors"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            <Server className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={onOpenAddTask}
-            title="Register New Task"
-            className="p-1 rounded transition-colors"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            <Plus className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-
-      {/* High Density Metric Cards */}
-      <div 
-        className="p-4 grid grid-cols-2 gap-2 border-b"
-        style={{ borderColor: 'var(--border)' }}
-      >
-        <div 
-          className="p-2.5 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: 'var(--bg-base)',
-            borderColor: 'var(--border-subtle)'
-          }}
-        >
-          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
-            OS Repos Tracked
-          </span>
-          <span className="text-lg font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
-            {osRepoCount}
+    <aside className="w-80 border-l border-white/10 bg-[#0A0E1A] flex flex-col shrink-0 overflow-hidden select-none">
+      {/* Quick Stats Header */}
+      <div className="p-4 border-b border-white/10 space-y-3 bg-slate-950/50">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold font-mono tracking-wider text-slate-300 uppercase flex items-center gap-1.5">
+            <Activity className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Workspace Metrics</span>
+          </h3>
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            SYSTEM OK
           </span>
         </div>
 
-        <div 
-          className="p-2.5 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: 'var(--bg-base)',
-            borderColor: 'var(--border-subtle)'
-          }}
-        >
-          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
-            Active Cron Jobs
-          </span>
-          <span className="text-lg font-bold font-mono" style={{ color: 'var(--accent)' }}>
-            {activeTaskCount} <span className="text-xs" style={{ color: 'var(--text-muted)' }}>/ {totalTaskCount}</span>
-          </span>
-        </div>
+        {/* 2x2 Stats Grid */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-2.5 rounded-lg bg-slate-900/90 border border-white/5 space-y-0.5">
+            <span className="text-[10px] font-mono text-slate-500 block">OS Repos Tracked</span>
+            <span className="text-lg font-bold font-mono text-emerald-400">
+              {stats?.updates?.categories?.os_project || 0}
+            </span>
+          </div>
 
-        <div 
-          className="p-2.5 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: 'var(--bg-base)',
-            borderColor: 'var(--border-subtle)'
-          }}
-        >
-          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
-            Unread Feed
-          </span>
-          <span className="text-lg font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
-            {unreadCount}
-          </span>
-        </div>
+          <div className="p-2.5 rounded-lg bg-slate-900/90 border border-white/5 space-y-0.5">
+            <span className="text-[10px] font-mono text-slate-500 block">Active Cron Jobs</span>
+            <span className="text-lg font-bold font-mono text-sky-400">
+              {stats?.tasks?.active || 0} / {stats?.tasks?.total || 0}
+            </span>
+          </div>
 
-        <div 
-          className="p-2.5 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: 'var(--bg-base)',
-            borderColor: 'var(--border-subtle)'
-          }}
-        >
-          <span className="text-[10px] font-mono block uppercase" style={{ color: 'var(--text-muted)' }}>
-            MCP Server
-          </span>
-          <span className="text-xs font-bold font-mono block mt-1" style={{ color: 'var(--accent)' }}>
-            Stdio (Online)
-          </span>
+          <div className="p-2.5 rounded-lg bg-slate-900/90 border border-white/5 space-y-0.5">
+            <span className="text-[10px] font-mono text-slate-500 block">Unread Feed</span>
+            <span className="text-lg font-bold font-mono text-amber-400">
+              {stats?.updates?.unread || 0}
+            </span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-slate-900/90 border border-white/5 space-y-0.5">
+            <span className="text-[10px] font-mono text-slate-500 block">MCP Server</span>
+            <span className="text-xs font-bold font-mono text-purple-400 flex items-center gap-1 pt-1">
+              <Server className="w-3 h-3 text-purple-400" />
+              <span>Stdio</span>
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Section Header: Autonomous Tasks */}
-      <div 
-        className="px-4 py-3 border-b flex items-center justify-between"
-        style={{ borderColor: 'var(--border)' }}
-      >
-        <div className="flex items-center space-x-2">
-          <Terminal className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-          <span className="text-xs font-bold font-mono uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
+      {/* Autonomous Tasks Section */}
+      <div className="p-3 border-b border-white/10 flex items-center justify-between bg-slate-950/30">
+        <div className="flex items-center space-x-1.5">
+          <Terminal className="w-3.5 h-3.5 text-sky-400" />
+          <h3 className="text-xs font-bold font-mono tracking-wider text-slate-300 uppercase">
             Autonomous Tasks
-          </span>
+          </h3>
         </div>
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--accent-bg)', color: 'var(--accent)' }}>
-          {tasks.length} Configured
-        </span>
+        <button
+          onClick={onOpenAddTask}
+          className="p-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-white/10 transition-colors text-xs flex items-center gap-1 font-mono"
+        >
+          <Plus className="w-3 h-3" />
+          <span>New</span>
+        </button>
       </div>
 
-      {/* Minimal Borderless Task Rows */}
-      <div className="flex-1 overflow-y-auto p-2 space-y-1">
+      {/* Task Cards Scroll List */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
         {tasks.length === 0 ? (
-          <div className="p-6 text-center text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+          <div className="p-6 text-center text-slate-500 text-xs font-mono">
             No autonomous tasks registered.
           </div>
         ) : (
@@ -159,73 +97,84 @@ export default function RightSidebar({
             const isActive = task.status === 'active';
             const isRunning = task.status === 'running';
             const isError = task.status === 'error';
-            const agentName = (task.agent_type || 'system').toUpperCase();
 
             return (
               <div
                 key={task.id}
-                className="p-3 rounded-lg transition-colors space-y-2 border"
-                style={{
-                  backgroundColor: 'var(--bg-base)',
-                  borderColor: 'var(--border-subtle)'
-                }}
+                className={`p-3 rounded-xl border transition-all space-y-2 bg-slate-900/80 ${
+                  isRunning 
+                    ? 'border-sky-500/50 shadow-md shadow-sky-500/10' 
+                    : isError
+                    ? 'border-rose-500/50'
+                    : isActive
+                    ? 'border-white/10 hover:border-white/20'
+                    : 'border-white/5 opacity-70'
+                }`}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center space-x-2 min-w-0">
-                    <span 
-                      className={`w-2 h-2 rounded-full shrink-0 ${isRunning ? 'animate-pulse' : ''}`}
-                      style={{
-                        backgroundColor: isRunning ? 'var(--accent)' : isActive ? 'var(--accent)' : isError ? '#F43F5E' : 'var(--text-muted)'
-                      }}
-                    />
-                    <span className="text-xs font-mono font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
+                {/* Task ID & Status */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-1.5 py-0.5 rounded border border-sky-500/20 block truncate font-bold">
                       {task.id}
                     </span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded uppercase border" style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', color: 'var(--accent)' }}>
-                      {agentName}
-                    </span>
+                    <h4 className="text-xs font-medium text-slate-200 mt-1 line-clamp-1">
+                      {task.name}
+                    </h4>
                   </div>
 
-                  <span className="text-[10px] font-mono shrink-0" style={{ color: 'var(--text-muted)' }}>
-                    {task.schedule}
+                  {/* Status Pill */}
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold shrink-0 flex items-center gap-1 ${
+                    isRunning 
+                      ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
+                      : isActive 
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      : isError
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      isRunning ? 'bg-sky-400 animate-spin' : isActive ? 'bg-emerald-400' : isError ? 'bg-rose-400' : 'bg-slate-500'
+                    }`} />
+                    {task.status.toUpperCase()}
                   </span>
                 </div>
 
-                <p className="text-[11px] line-clamp-1" style={{ color: 'var(--text-secondary)' }}>
-                  {task.name}
-                </p>
+                {/* Schedule & Last Run info */}
+                <div className="text-[11px] font-mono text-slate-400 space-y-0.5 bg-slate-950/60 p-2 rounded-lg border border-white/5">
+                  <div className="flex items-center justify-between text-slate-400">
+                    <span className="text-slate-500">Schedule:</span>
+                    <span className="text-slate-200">{task.schedule}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-slate-400">
+                    <span className="text-slate-500">Last Run:</span>
+                    <span>{task.last_run_at ? formatTimeAgo(task.last_run_at) : 'Never'}</span>
+                  </div>
+                </div>
 
-                <div 
-                  className="flex items-center justify-between pt-1 border-t"
-                  style={{ borderColor: 'var(--border-subtle)' }}
-                >
+                {/* Task Actions */}
+                <div className="flex items-center justify-between pt-1 border-t border-white/5">
                   <button
                     onClick={() => onTriggerTask(task.id)}
                     disabled={isRunning}
-                    className="flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-mono transition-opacity"
-                    style={{
-                      backgroundColor: 'var(--accent)',
-                      color: '#FFFFFF'
-                    }}
+                    className="flex items-center space-x-1 px-2.5 py-1 rounded bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-[11px] font-mono font-medium border border-emerald-500/30 transition-colors disabled:opacity-50"
                   >
-                    <Play className="w-2.5 h-2.5 fill-current" />
-                    <span>{isRunning ? 'Running...' : 'Run Now'}</span>
+                    <Play className="w-3 h-3 fill-emerald-300 text-emerald-300" />
+                    <span>Run Now</span>
                   </button>
 
                   <div className="flex items-center space-x-1">
                     <button
-                      onClick={() => onToggleTaskPause(task.id, task.status)}
-                      title={isActive ? "Pause Task" : "Resume Task"}
-                      className="p-1 rounded transition-colors"
-                      style={{ color: 'var(--text-muted)' }}
+                      onClick={() => onToggleTaskPause(task.id, isActive ? 'paused' : 'active')}
+                      title={isActive ? 'Pause Task' : 'Resume Task'}
+                      className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-white/10 transition-colors"
                     >
-                      {isActive ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                      {isActive ? <Pause className="w-3 h-3 text-amber-400" /> : <Play className="w-3 h-3 text-emerald-400" />}
                     </button>
+                    
                     <button
-                      onClick={() => onOpenLogs(task.id)}
-                      title="View Execution Logs"
-                      className="p-1 rounded transition-colors"
-                      style={{ color: 'var(--text-muted)' }}
+                      onClick={() => onViewLogs(task)}
+                      title="View Output Logs"
+                      className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-white/10 transition-colors"
                     >
                       <FileText className="w-3 h-3" />
                     </button>
@@ -236,6 +185,21 @@ export default function RightSidebar({
           })
         )}
       </div>
-    </div>
+    </aside>
   );
+}
+
+function formatTimeAgo(isoString) {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }

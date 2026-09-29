@@ -92,8 +92,8 @@ async function main() {
           if (r.delta !== null && r.delta !== 0) {
             db.addUpdate({
               title: `${r.full}: ${deltaStr} stars since last check`,
-              category: 'custom',
-              markdown_content: `### 📈 ${r.full}\n\nVelocity update from **repo-star-tracker**.\n\n| Metric | Value |\n| :--- | :--- |\n| **Current stars** | ${r.stars} |\n| **Delta since last check** | ${deltaStr} |\n| **Language** | ${r.language || 'unknown'} |\n\n**Why it matters**: live star velocity is the strongest signal for a repo about to go viral.`,
+              category: 'os_project',
+              markdown_content: `### 📈 [${r.full}](https://github.com/${r.full})\n\nVelocity update from **repo-star-tracker**.\n\n| Metric | Value |\n| :--- | :--- |\n| **Repository** | [github.com/${r.full}](https://github.com/${r.full}) |\n| **Current stars** | ${r.stars} |\n| **Delta since last check** | ${deltaStr} |\n| **Language** | ${r.language || 'unknown'} |\n\n**Why it matters**: live star velocity is the strongest signal for a repo about to go viral.`,
               tags: ['star-velocity', 'os-project', 'tracker'],
               source_agent: 'repo-star-tracker',
               metadata: { repo_url: `https://github.com/${r.full}`, stars: r.stars, star_growth: deltaStr },
