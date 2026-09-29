@@ -150,25 +150,24 @@ export default function DateNavigator({
         {/* Previous Day (Older) - Left Arrow */}
         <button
           ref={prevBtnRef}
-          onClick={() => !effectiveIsAtOldest && !isLoading && onNavigate(offset + pageSize)}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!effectiveIsAtOldest && !isLoading) onNavigate(offset + pageSize);
+          }}
           disabled={effectiveIsAtOldest || isLoading}
           aria-label="Older entries (←)"
           aria-disabled={effectiveIsAtOldest || isLoading}
           className={`
-            relative flex items-center justify-center w-8 h-8 rounded-lg
+            relative flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 rounded-lg touch-manipulation shrink-0
             transition-all duration-200 ease-[0.16,1,0.3,1]
             ${effectiveIsAtOldest || isLoading
               ? 'opacity-30 cursor-not-allowed text-slate-600 bg-slate-900 border border-white/5'
               : 'text-slate-300 bg-slate-900 border border-white/10 hover:text-white hover:border-emerald-500/50 hover:bg-slate-800/50 active:scale-95'
             }
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50
           `}
         >
-          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-          {/* Tooltip */}
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-[10px] font-mono bg-slate-900 border border-white/10 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 whitespace-nowrap z-10">
-            Older (←)
-          </span>
+          <ChevronLeft className="w-5 h-5 sm:w-4 sm:h-4" aria-hidden="true" />
         </button>
 
         {/* Date Display / Page Indicator */}
@@ -211,25 +210,24 @@ export default function DateNavigator({
         {/* Next Day (Newer) - Right Arrow */}
         <button
           ref={nextBtnRef}
-          onClick={() => !effectiveIsAtLatest && !isLoading && onNavigate(Math.max(0, offset - pageSize))}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!effectiveIsAtLatest && !isLoading) onNavigate(Math.max(0, offset - pageSize));
+          }}
           disabled={effectiveIsAtLatest || isLoading}
           aria-label="Newer entries (→)"
           aria-disabled={effectiveIsAtLatest || isLoading}
           className={`
-            relative flex items-center justify-center w-8 h-8 rounded-lg
+            relative flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 rounded-lg touch-manipulation shrink-0
             transition-all duration-200 ease-[0.16,1,0.3,1]
             ${effectiveIsAtLatest || isLoading
               ? 'opacity-30 cursor-not-allowed text-slate-600 bg-slate-900 border border-white/5'
               : 'text-slate-300 bg-slate-900 border border-white/10 hover:text-white hover:border-emerald-500/50 hover:bg-slate-800/50 active:scale-95'
             }
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50
           `}
         >
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
-          {/* Tooltip */}
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-[10px] font-mono bg-slate-900 border border-white/10 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 whitespace-nowrap z-10">
-            Newer (→)
-          </span>
+          <ChevronRight className="w-5 h-5 sm:w-4 sm:h-4" aria-hidden="true" />
         </button>
       </div>
 

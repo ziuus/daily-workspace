@@ -255,13 +255,15 @@ export default function App() {
     return (
       <div
         className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-sm md:hidden"
-        onClick={handleMobileMenuClose}
         role="dialog"
         aria-modal="true"
         aria-label="Feed sidebar"
       >
-        <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80">
+        <div 
+          className="flex h-full flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80 shrink-0">
             <h3 className="font-bold font-mono text-white text-sm">Feed</h3>
             <button
               onClick={handleMobileMenuClose}
@@ -271,7 +273,7 @@ export default function App() {
               <span className="text-xl leading-none">×</span>
             </button>
           </div>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto">
             <LeftSidebar
               updates={updates}
               selectedUpdate={selectedUpdate}
@@ -305,14 +307,13 @@ export default function App() {
 
     return (
       <div
-        className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-sm md:hidden"
-        onClick={() => setSelectedUpdate(null)}
+        className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-sm md:hidden overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-label="Reading update"
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80">
+          <div className="flex items-center justify-between p-3 border-b border-white/10 bg-slate-950/80 shrink-0">
             <h3 className="font-bold font-mono text-white text-sm truncate max-w-[200px]">
               {selectedUpdate.title}
             </h3>
@@ -324,7 +325,7 @@ export default function App() {
               <span className="text-xl leading-none">×</span>
             </button>
           </div>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto">
             <ReadingCanvas
               update={selectedUpdate}
               onToggleRead={handleToggleRead}
