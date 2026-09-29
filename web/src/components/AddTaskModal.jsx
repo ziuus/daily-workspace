@@ -30,7 +30,10 @@ export default function AddTaskModal({ isOpen, onClose, onAddTask }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-[#0F1623] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div 
+        className="w-full max-w-lg bg-[#0F1623] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-4 border-b border-white/10 flex items-center justify-between bg-slate-900/50">
           <div className="flex items-center space-x-2">
             <Terminal className="w-4 h-4 text-sky-400" />

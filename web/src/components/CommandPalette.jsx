@@ -34,7 +34,10 @@ export default function CommandPalette({ isOpen, onClose, updates, tasks, onSele
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-start justify-center pt-24 px-4">
-      <div className="w-full max-w-xl bg-[#0F1623] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150">
+      <div 
+        className="w-full max-w-xl bg-[#0F1623] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Input Bar */}
         <div className="p-4 border-b border-white/10 flex items-center space-x-3 bg-slate-900/50">
           <Search className="w-5 h-5 text-slate-400 shrink-0" />
