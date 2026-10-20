@@ -43,6 +43,10 @@ jobs:
         run: npm ci
         working-directory: .
 
+      - name: Upgrade npm (OIDC trusted publishing needs npm >= 11.5.1)
+        run: npm install -g npm@latest
+        shell: bash
+
       - name: Install web dependencies
         run: npm ci
         working-directory: ./web
