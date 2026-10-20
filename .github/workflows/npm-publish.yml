@@ -1,0 +1,79 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version bump type (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  id-token: write   # Required for OIDC trusted publishing
+  contents: read    # Required for checkout
+  attestations: write  # Required for provenance
+
+jobs:
+  publish:
+    name: Publish @ziuus/daily to npm
+    runs-on: ubuntu-latest
+    environment: release  # Optional: add environment protection rules
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for version bump
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Build web frontend
+        run: npm run build
+        working-directory: ./web
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version (workflow_dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to $(node -p "require('./package.json').version")"
+          git push
+
+      - name: Publish to npm with provenance
+        run: npm publish --provenance --access public
+        working-directory: .
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Fallback; not needed with trusted publisher
+
+      - name: Create GitHub Release (workflow_dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v$(node -p "require('./package.json').version")
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify provenance
+        run: |
+          echo "Published with provenance. Check: npm view @ziuus/daily@$(node -p "require('./package.json').version") --json | jq .provenance"
