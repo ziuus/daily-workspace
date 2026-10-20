@@ -24,7 +24,8 @@ jobs:
   publish:
     name: Publish @ziuus/daily to npm
     runs-on: ubuntu-latest
-    environment: release  # Optional: add environment protection rules
+    # NOTE: no `environment:` key — the npm trusted publisher config has no
+    # environment field, and a mismatch here silently disables OIDC auth.
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -66,8 +67,8 @@ jobs:
       - name: Publish to npm with provenance
         run: npm publish --provenance --access public
         working-directory: .
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Fallback; not needed with trusted publisher
+        # Trusted publishing (OIDC) supplies the auth token automatically.
+        # Do NOT set NODE_AUTH_TOKEN here — an empty value breaks the OIDC exchange.
 
       - name: Create GitHub Release (workflow_dispatch only)
         if: github.event_name == 'workflow_dispatch'
