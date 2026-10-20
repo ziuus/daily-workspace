@@ -44,7 +44,9 @@ jobs:
         working-directory: .
 
       - name: Upgrade npm (OIDC trusted publishing needs npm >= 11.5.1)
-        run: npm install -g npm@latest
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm install -g npm@latest --registry=https://registry.npmjs.org/
         shell: bash
 
       - name: Install web dependencies
