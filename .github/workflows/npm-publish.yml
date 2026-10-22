@@ -15,6 +15,10 @@ on:
           - minor
           - major
 
+concurrency:
+  group: publish-daily-${{ github.ref_name || github.ref }}
+  cancel-in-progress: false
+
 permissions:
   id-token: write   # Required for OIDC trusted publishing
   contents: read    # Required for checkout
@@ -71,7 +75,19 @@ jobs:
           git push
 
       - name: Publish to npm with provenance
-        run: npm publish --provenance --access public
+        run: |
+          CURRENT_VER=$(node -p "require('./package.json').version")
+          if npm view @ziuus/daily@"$CURRENT_VER" version >/dev/null 2>&1; then
+            echo "@ziuus/daily@$CURRENT_VER is already published on npm. Skipping publish step."
+          else
+            npm publish --provenance --access public || {
+              if npm view @ziuus/daily@"$CURRENT_VER" version >/dev/null 2>&1; then
+                echo "@ziuus/daily@$CURRENT_VER is already published on npm. Continuing."
+              else
+                exit 1
+              fi
+            }
+          fi
         working-directory: .
         # Trusted publishing (OIDC) supplies the auth token automatically.
         # Do NOT set NODE_AUTH_TOKEN here — an empty value breaks the OIDC exchange.
