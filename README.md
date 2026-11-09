@@ -12,6 +12,10 @@
 
 </div>
 
+> Building this in the open — if it saves you time, a star helps others find it.
+> Found a bug, or have an idea? [Open an issue](https://github.com/ziuus/daily-workspace/issues).
+> New feed sources and automation ideas welcome.
+
 ---
 
 ## 🖥️ Dashboard Interface Preview
